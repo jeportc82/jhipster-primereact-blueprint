@@ -1,0 +1,10 @@
+{
+  "generator-jhipster-blueprint": {
+    "promptValues": {
+      "githubName": "jeportc82",
+      "authorName": "Jhon Eder Portocarrero",
+      "authorEmail": "jeportc82@gmail.com",
+      "authorUrl": ""
+    }
+  }
+}

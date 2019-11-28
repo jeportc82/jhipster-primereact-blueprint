@@ -1,0 +1,124 @@
+<%#
+ Copyright 2013-2019 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+<%_ if (authenticationType !== 'oauth2') { _%>
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+<%_ } _%>
+import { JhiLanguageService } from 'ng-jhipster';
+<%_ if (enableTranslation) { _%>
+import { SessionStorageService } from 'ngx-webstorage';
+<%_ } _%>
+
+import { VERSION } from 'app/app.constants';
+<%_ if (enableTranslation) { _%>
+import { JhiLanguageHelper } from 'app/core/language/language.helper';
+<%_ } _%>
+import { AccountService } from 'app/core/auth/account.service';
+<%_ if (authenticationType !== 'oauth2') { _%>
+import { LoginModalService } from 'app/core/login/login-modal.service';
+<%_ } _%>
+import { LoginService } from 'app/core/login/login.service';
+import { ProfileService } from 'app/layouts/profiles/profile.service';
+
+@Component({
+    selector: '<%= jhiPrefixDashed %>-navbar',
+    templateUrl: './navbar.component.html',
+    styleUrls: [
+        'navbar.scss'
+    ]
+})
+export class NavbarComponent implements OnInit {
+    inProduction: boolean;
+    isNavbarCollapsed: boolean;
+    <%_ if (enableTranslation) { _%>
+    languages: any[];
+    <%_ } _%>
+    swaggerEnabled: boolean;
+    <%_ if (authenticationType !== 'oauth2') { _%>
+    modalRef: NgbModalRef;
+    <%_ } _%>
+    version: string;
+
+    constructor(
+        private loginService: LoginService,
+        <%_ if (enableTranslation) { _%>
+        private languageService: JhiLanguageService,
+        private languageHelper: JhiLanguageHelper,
+        private sessionStorage: SessionStorageService,
+        <%_ } _%>
+        private accountService: AccountService,
+        <%_ if (authenticationType !== 'oauth2') { _%>
+        private loginModalService: LoginModalService,
+        <%_ } _%>
+        private profileService: ProfileService,
+        private router: Router
+    ) {
+        this.version = VERSION ? (VERSION.toLowerCase().startsWith('v') ? VERSION : 'v' + VERSION) : '';
+        this.isNavbarCollapsed = true;
+    }
+
+    ngOnInit() {
+        <%_ if (enableTranslation) { _%>
+        this.languages = this.languageHelper.getAll();
+
+        <%_ } _%>
+        this.profileService.getProfileInfo().subscribe((profileInfo) => {
+            this.inProduction = profileInfo.inProduction;
+            this.swaggerEnabled = profileInfo.swaggerEnabled;
+        });
+    }
+
+    <%_ if (enableTranslation) { _%>
+    changeLanguage(languageKey: string) {
+        this.sessionStorage.store('locale', languageKey);
+        this.languageService.changeLanguage(languageKey);
+    }
+
+    <%_ } _%>
+    collapseNavbar() {
+        this.isNavbarCollapsed = true;
+    }
+
+    isAuthenticated() {
+        return this.accountService.isAuthenticated();
+    }
+
+    login() {
+        <%_ if (authenticationType !== 'oauth2') { _%>
+        this.modalRef = this.loginModalService.open();
+        <%_ } else { _%>
+        this.loginService.login();
+        <%_ } _%>
+    }
+
+    logout() {
+        this.collapseNavbar();
+        this.loginService.logout();
+        this.router.navigate(['']);
+    }
+
+    toggleNavbar() {
+        this.isNavbarCollapsed = !this.isNavbarCollapsed;
+    }
+
+    getImageUrl() {
+        return this.isAuthenticated() ? this.accountService.getImageUrl() : null;
+    }
+}
