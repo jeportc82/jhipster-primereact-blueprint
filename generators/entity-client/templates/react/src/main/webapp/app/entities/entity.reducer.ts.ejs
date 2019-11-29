@@ -21,6 +21,7 @@
     let entityActionNamePlural = entityInstancePlural.toUpperCase();
 _%>
 import axios from 'axios';
+import qs from 'qs';
 import {
   <%_ if (searchEngine === 'elasticsearch') { _%>
   ICrudSearchAction,
@@ -28,7 +29,7 @@ import {
   <%_ if (pagination === 'infinite-scroll') { _%>
   parseHeaderForLinks, loadMoreDataWhenScrolled,
   <%_ } _%>
-  ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction
+  ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction, IPayload
 } from 'react-jhipster';
 
 import { cleanEntity } from 'app/shared/util/entity-utils';
@@ -40,6 +41,8 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 
 <%_ } _%>
 import { I<%= entityReactName %>, defaultValue } from 'app/shared/model/<%= entityModelFileName %>.model';
+
+export declare type ICrudGetAllByQueryAction<T> = (query?: any) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
 export const ACTION_TYPES = {
   <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -210,6 +213,7 @@ export const getSearchEntities: ICrudSearchAction<I<%= entityReactName %>> = (qu
 });
 
 <%_ } _%>
+
 export const getEntities: ICrudGetAllAction<I<%= entityReactName %>> = (page, size, sort) =>
 <%_ if (pagination !== 'no') { _%>
 {
@@ -225,6 +229,17 @@ export const getEntities: ICrudGetAllAction<I<%= entityReactName %>> = (page, si
   payload: axios.get<I<%= entityReactName %>>(`${apiUrl}?cacheBuster=${new Date().getTime()}`)
 });
 <%_ } _%>
+
+export const getEntitiesByQuery:ICrudGetAllByQueryAction<I<%= entityReactName %>> = (query) =>
+{
+  return {
+    type: ACTION_TYPES.FETCH_<%= entityActionName %>_LIST,
+    payload: axios.get<I<%= entityReactName %>>(apiUrl, {
+    params: { ...query },
+    paramsSerializer: params => qs.stringify(params, { indices: false })
+  })
+  }
+}
 
 export const getEntity: ICrudGetAction<I<%= entityReactName %>> = id => {
   const requestUrl = `${apiUrl}/${id}`;

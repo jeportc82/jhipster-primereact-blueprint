@@ -16,27 +16,28 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+
 // Override Boostrap variables
-<%_ if (clientTheme !== 'none') {_%>
-@import "~bootswatch/dist/<%= clientTheme %>/variables";
-<%_ } _%>
+@import 'bootstrap-variables';
 // Import Bootstrap source files from node_modules
 @import "node_modules/bootstrap/scss/bootstrap";
-<%_ if (clientTheme !== 'none') { _%>
-@import "~bootswatch/dist/<%= clientTheme %>/bootswatch";
-<%_ } _%>
 <%_ if (enableI18nRTL) { _%>
 @import 'rtl.scss';
 <%_ } _%>
 body {
-  <%_ if (clientTheme === 'none') { _%>
-  background: #fafafa;
-  <%_ } _%>
   margin: 0;
 }
 
 a {
-  color: #533f03;
+  <%_ if (clientTheme === 'nova-light') { _%>
+    color: #533f03;
+  <%_ } _%>
+  <%_ if (clientTheme === 'nova-dark') { _%>
+    color: #533f03;
+  <%_ } _%>
+  <%_ if (clientTheme === 'rhea') { _%>
+    color: #ffff;
+  <%_ } _%>
   font-weight: bold;
 }
 
@@ -342,5 +343,12 @@ http://stackoverflow.com/questions/23436430/bootstrap-3-input-group-100-width */
 .form-check-input {
   margin-top: -0.5rem;
 }
+
+@import '~primeicons/primeicons.css';
+@import '~primeflex/primeflex.css';
+@import '~primeicons/primeicons.css';
+@import '~primereact/resources/primereact.min.css';
+@import '.~primereact/resources/themes/<%=clientTheme%>/theme.css';
+@import '~primeflex/primeflex.css';
 
 /* jhipster-needle-scss-add-main JHipster will add new css style */

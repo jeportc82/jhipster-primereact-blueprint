@@ -2,6 +2,7 @@
 const chalk = require('chalk');
 const ClientGenerator = require('generator-jhipster/generators/client');
 const writeReactFiles = require('./files-react').writeFiles;
+const prompts = require('./prompts');
 // const writeAngularFiles = require('./files-angular').writeFiles;
 
 module.exports = class extends ClientGenerator {
@@ -63,21 +64,21 @@ module.exports = class extends ClientGenerator {
 
     get prompting() {
         // The prompting phase is being overriden so that we can ask our own questions
-        // return {
-        //     askForClient: prompts.askForClient,
-        //     askForClientSideOpts: prompts.askForClientSideOpts,
+        return {
+            askForClient: prompts.askForClient,
+            askForClientTheme: prompts.askForClientTheme,
 
-        //     setSharedConfigOptions() {
-        //         this.configOptions.lastQuestion = this.currentQuestion;
-        //         this.configOptions.totalQuestions = this.totalQuestions;
-        //         this.configOptions.clientFramework = this.clientFramework;
-        //         this.configOptions.useSass = this.useSass;
-        //     }
-        // };
+            // setSharedConfigOptions() {
+            //     this.configOptions.lastQuestion = this.currentQuestion;
+            //     this.configOptions.totalQuestions = this.totalQuestions;
+            //     this.configOptions.clientFramework = this.clientFramework;
+            //     this.configOptions.useSass = this.useSass;
+            // }
+        };
         // If the prompts need to be overriden then use the code commented out above instead
 
         // Here we are not overriding this phase and hence its being handled by JHipster
-        return super._prompting();
+        // return super._prompting();
     }
 
     get configuring() {
