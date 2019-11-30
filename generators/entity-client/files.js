@@ -276,15 +276,10 @@ function addSampleRegexTestingStrings(generator) {
 }
 
 function writeFiles() {
-    this.info('Escribiendo');
-    // return {
-    // writeClientFiles() {
-    // this.fsasdfinfo('WritingFiles');
     if (this.skipClient) return;
     addSampleRegexTestingStrings(this);
     if (this.clientFramework === 'angularX') {
         // write client side files for angular 2.x +
-        this.info('Angular');
         this.writeFilesToDisk(
             angularFiles,
             this,
@@ -305,7 +300,6 @@ function writeFiles() {
         addEnumerationFiles(this, CLIENT_NG2_TEMPLATES_DIR, ANGULAR_DIR);
     } else if (this.clientFramework === 'react') {
         // write client side files for react
-        this.info('React');
         this.writeFilesToDisk(reactFiles, this, false, `${CLIENT_REACT_TEMPLATES_DIR}`);
         this.addEntityToModule(
             this.entityInstance,
@@ -320,6 +314,4 @@ function writeFiles() {
         addEnumerationFiles(this, CLIENT_REACT_TEMPLATES_DIR, REACT_DIR);
     }
     this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework, this.entityTranslationKeyMenu);
-    // }
-    // };
 }

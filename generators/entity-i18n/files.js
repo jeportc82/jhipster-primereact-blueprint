@@ -28,33 +28,41 @@ module.exports = {
 };
 
 function writeFiles() {
-    return {
-        writeEnumFiles() {
-            this.fields.forEach(field => {
-                if (field.fieldIsEnum === true) {
-                    const enumInfo = utils.buildEnumInfo(field, this.angularAppName, this.packageName, this.clientRootFolder);
+    this.info('hooa');
 
-                    // Copy for each
-                    if (!this.skipClient && this.enableTranslation) {
-                        const languages = this.languages || this.getAllInstalledLanguages();
-                        languages.forEach(language => {
-                            this.copyEnumI18n(language, enumInfo, this.fetchFromInstalledJHipster('entity-i18n/templates'));
-                        });
-                    }
-                }
-            });
-        },
-
-        writeClientFiles() {
-            if (this.skipClient) return;
+    // writeEnumFiles() {
+    this.fields.forEach(field => {
+        if (field.fieldIsEnum === true) {
+            const enumInfo = utils.buildEnumInfo(field, this.angularAppName, this.packageName, this.clientRootFolder);
 
             // Copy for each
-            if (this.enableTranslation) {
+            
+            if (!this.skipClient && this.enableTranslation) {
+                this.info('copyEnumllll');
                 const languages = this.languages || this.getAllInstalledLanguages();
                 languages.forEach(language => {
-                    this.copyI18n(language, this.fetchFromInstalledJHipster('entity-i18n/templates'));
+                    this.copyEnumI18n(language, enumInfo, 'templates');
                 });
             }
         }
-    };
+    });
+    // }
+
+    // writeClientFiles() {
+    if (this.skipClient) return;
+
+    // Copy for each
+
+    if (this.enableTranslation) {
+        const languages = this.languages || this.getAllInstalledLanguages();
+        languages.forEach(language => {
+            this.info('copyI18nllllll');
+            this.copyI18n(language, 'entity-i18n/templates');
+            this.copyI18n(language, '/entity-i18n/templates/');
+            this.copyI18n(language, './templates');
+            this.copyI18n(language);
+
+        });
+    }
+    // }
 }
