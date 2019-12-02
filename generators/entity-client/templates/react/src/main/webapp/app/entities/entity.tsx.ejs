@@ -22,24 +22,7 @@ import { translate } from 'react-jhipster';
 import InfiniteScroll from 'react-infinite-scroller';
 <%_ } _%>
 import { connect } from 'react-redux';
-import { Link, RouteComponentProps } from 'react-router-dom';
-import {
-  <%_ if (blobFields.length > 0) { _%>
-    <%_ if (fieldsContainBlobOrImage) { _%>
-  openFile,
-    <%_ } _%>
-  byteSize,
-  <%_ } _%>
-  Translate<% if (searchEngine === 'elasticsearch') { %>, translate, ICrudSearchAction<% } %>,
-  ICrudGetAllAction<% if (fieldsContainDate) { %>, TextFormat<% } %>
-  <%_ if (pagination !== 'no') { _%>
-  , getSortState, IPaginationBaseState
-  <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
-  , JhiPagination, JhiItemCount
-  <%_ }} _%>
-} from 'react-jhipster';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
+import { RouteComponentProps } from 'react-router-dom';
 import { IRootState } from 'app/shared/reducers';
 import {
   <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -51,19 +34,66 @@ import {
   <%_ } _%>
 } from './<%= entityFileName %>.reducer';
 import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
- import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
-<%_ if (pagination !== 'no') { _%>
-import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
+<%_
+let hasRelationshipQuery = false;
+let otherEntityActions = new Set();
+let manyToManyOwners = new Set();
+let relFieldNames = new Set();
+let uniqueRealtionFields = new Set();
+
+
+Object.keys(differentRelationships).forEach(key => {
+
+  const hasAnyRelationshipQuery = differentRelationships[key].some(rel =>
+      (rel.relationshipType === 'one-to-one' && rel.ownerSide === true && rel.otherEntityName !== 'user')
+          || rel.relationshipType !== 'one-to-many'
+  );
+  if (hasAnyRelationshipQuery) {
+    hasRelationshipQuery = true;
+    differentRelationships[key].forEach(rel => {
+      if (rel.relationshipType === 'many-to-many' && rel.ownerSide === true) {
+        manyToManyOwners.add(rel);
+      } else {
+        relFieldNames.add(rel);
+      }
+    });
+  }
+  if (differentRelationships[key].some(rel => rel.relationshipType !== 'one-to-many')) {
+    const uniqueRel = differentRelationships[key][0];
+    uniqueRealtionFields.add(uniqueRel.otherEntityNamePlural);
+    otherEntityActions.add({
+      action: `get${upperFirstCamelCase(uniqueRel.otherEntityNamePlural)}`,
+      instance: `${uniqueRel.otherEntityNamePlural}`,
+      entity: uniqueRel.otherEntityAngularName,
+      reducer: uniqueRel.otherEntityAngularName === 'User' ? 'userManagement' : uniqueRel.otherEntityName
+    });
+    if (uniqueRel.otherEntityAngularName === 'User') {
+_%>
+import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/user.model';
+<%_ if (authenticationType === 'oauth2') { _%>
+import { getUsers } from 'app/shared/reducers/user-management';
+<%_ } else { _%>
+import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
 <%_ } _%>
+<%_
+  } else {
+    if (uniqueRel.otherEntityAngularName !== entityReactName) {
+_%>
+import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/<%= uniqueRel.otherEntityModelName %>.model';
+  <%_ } _%>
+import { getEntities as get<%= upperFirstCamelCase(uniqueRel.otherEntityNamePlural) %> } from 'app/entities/<%= uniqueRel.otherEntityPath %>/<%= uniqueRel.otherEntityFileName %>.reducer';
+<%_ }
+  }
+}); _%>
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { Dialog } from 'primereact/dialog';
 import { MultiSelect } from 'primereact/multiselect';
 import { OverlayPanel } from 'primereact/overlaypanel';
 import { InputText } from 'primereact/inputtext';
-import { ScrollPanel } from 'primereact/scrollpanel';
 import { Dropdown } from 'primereact/dropdown';
 import { Button } from 'primereact/button';
+import {Calendar} from 'primereact/calendar';
+import moment from 'moment';
 
 export interface I<%= entityReactName %>Props extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {
 
@@ -77,14 +107,18 @@ export interface I<%= entityReactName %>State extends IPaginationBaseState {
 export interface I<%= entityReactName %>State {
   search: string;
 }
-<%_ } else if (pagination !== 'no') { _%>
-export type I<%= entityReactName %>State = IPaginationBaseState;
 <%_ } _%>
 
+
 export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
-  let op;
-  let dt;
+  let op:any;
+  let dt:any;
   const cols = [
+  {
+    field:'id',
+    fieldType:'Long',
+    header: 'Id'
+  },
   <%_ for (idx in fields) { 
     const fieldType = fields[idx].fieldType;
     const fieldName = fields[idx].fieldName;
@@ -209,9 +243,26 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
               dt.filter(e.value, field, 'equals');
             }}
           />
+        ) : fieldType === 'LocalDate' ? (
+          <Calendar
+            value={filters[field] && filters[field].value}
+            appendTo={document.body}
+            onChange={e => {
+              dt.filter(moment(e.value.valueOf()).format('YYYY-MM-DD'), field, 'equals');
+            }}
+          />
+        ) : fieldType === 'ZonedDateTime' || fieldType === 'Instant' ? (
+          <Calendar
+            value={filters[field] && filters[field].value}
+            appendTo={document.body}
+            showTime={true}
+            onChange={e => {
+              dt.filter(moment(e.value.valueOf()).toISOString(), field, 'lessThanOrEqual');
+            }}
+          />
         ) : (
           <InputText
-            value={filters[field] ? filters[field].value:''}
+            value={filters[field] ? filters[field].value : ''}
             onChange={e => {
               dt.filter(e.currentTarget.value, field, fieldType === 'String' ? 'contains' : 'equals');
             }}
@@ -224,7 +275,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   const header = (
     <div className="p-grid">
       <div className="p-col-6" style={{ textAlign: 'left' }}>
-        <Button className="p-button-secondary" label={translate('<%= i18nKeyPrefix %>.home.createLabel')} />
+        <Button className="p-button-secondary" label={translate('<%= i18nKeyPrefix %>.home.createLabel')} onClick={()=>props.history.push('<%= entityModelFileName %>/new')} />
       </div>
       <div className="p-col-6" style={{ textAlign: 'right' }}>
       <Button type="button" className="p-button-secondary" label={translate('<%= i18nKeyPrefix %>.home.showColumns')} onClick={e => op.toggle(e)} />
@@ -244,10 +295,10 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   const fieldTemplate = (entity: any, column: any) => {
     if (column['fieldType'] === 'action') {
       return (
-        <div style={{ width: 240, textAlign: 'center' }}>
+        <div style={{ width: 260, textAlign: 'center' }}>
           <Button
             type="button"
-            onClick={() => props.history.push('<%= entityInstance %>/' + entity.id + '/edit')}
+            onClick={() => props.history.push('<%= entityModelFileName %>/' + entity.id + '/edit')}
             icon="pi pi-pencil"
             className="p-button-warning"
             style={{ marginRight: '.5em' }}
@@ -255,7 +306,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
           />
           <Button
             type="button"
-            onClick={() => props.history.push('<%= entityInstance %>/' + entity.id + '/delete')}
+            onClick={() => props.history.push('<%= entityModelFileName %>/' + entity.id + '/delete')}
             icon="pi pi-times"
             className="p-button-danger"
             style={{ marginRight: '.5em' }}
@@ -313,19 +364,26 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
 
 }
 
-  const mapStateToProps = ({ <%= entityInstance %> }: IRootState) => ({
-    <%= entityInstance %>List: <%= entityInstance %>.entities,
+  const mapStateToProps = ( storeState : IRootState) => ({
+    <%_ otherEntityActions.forEach(val => { _%>
+    <%= val.instance %>: storeState.<%= val.reducer %>.<%= val.entity === 'User' ? val.instance : 'entities' %>,
+  <%_ }) _%>
+  <%= entityInstance %>Entity: storeState.<%= entityInstance %>.entity,
+    <%= entityInstance %>List: storeState.<%= entityInstance %>.entities,
     <%_ if (pagination !== 'no') { _%>
-    totalItems: <%= entityInstance %>.totalItems,
+    totalItems: storeState.<%= entityInstance %>.totalItems,
     <%_ } _%>
     <%_ if (pagination === 'infinite-scroll') { _%>
-    links: <%= entityInstance %>.links,
-    entity: <%= entityInstance %>.entity,
-    updateSuccess: <%= entityInstance %>.updateSuccess,
+    links: storeState.<%= entityInstance %>.links,
+    entity: storeState.<%= entityInstance %>.entity,
+    updateSuccess: storeState.<%= entityInstance %>.updateSuccess,
     <%_ } _%>
   });
 
   const mapDispatchToProps = {
+  <%_ otherEntityActions.forEach(val => { _%>
+  <%= val.action %>,
+  <%_ }) _%>
   <%_ if (searchEngine === 'elasticsearch') { _%>
   getSearchEntities,
   <%_ } _%>
