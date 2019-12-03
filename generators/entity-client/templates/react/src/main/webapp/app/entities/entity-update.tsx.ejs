@@ -368,10 +368,10 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
                 <%_ if (!relationshipRequired) { _%>
                   <div className="p-col-8">
                     <h5>
-                      <Translate contentKey="blueprinttestApp.student.user">Users</Translate>
+                      <Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate>
                     </h5>
                     <Dropdown
-                      value={entity.userId ? entity.userId : 0}
+                      value={entity.<%=otherEntityName%>Id ? entity.<%=otherEntityName%>Id : 0}
                       options={[...props.<%= otherEntityNamePlural %>.map(e=>({label:e.<%=otherEntityField%>,value:e.id}))]}
                       onChange={e => setEntity({ ...entity, <%= relationshipName %>Id: e.value })}
                       placeholder="Select a Car"
@@ -380,10 +380,10 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
                 <%_ } else { _%>
                   <div className="p-col-8">
                     <h5>
-                      <Translate contentKey="blueprinttestApp.student.user">Users</Translate>
+                      <Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate>
                     </h5>
                     <Dropdown
-                      value={entity.userId ? entity.userId : 0}
+                      value={entity.<%=otherEntityName%>Id ? entity.<%=otherEntityName%>Id : 0}
                       options={[...props.<%= otherEntityNamePlural %>.map(e=>({label:e.<%=otherEntityField%>,value:e.id}))]}
                       onChange={e => setEntity({ ...entity, <%= relationshipName %>Id: e.value })}
                       placeholder="Select a Car"
