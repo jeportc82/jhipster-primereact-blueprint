@@ -182,8 +182,11 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
         props.getEntitiesByQuery({ rows, first, filters });
       <%_ } _%>
     <%_ } else { _%>
-    props.getEntities();
+      props.getEntities();
     <%_ } _%>
+    <%_ otherEntityActions.forEach(val => { _%>
+      props.<%= val.action %>();
+    <%_ }) _%>
   }, []);
 
   const { <%= entityInstance %>List, totalItems } = props;
