@@ -295,14 +295,24 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   const fieldTemplate = (entity: any, column: any) => {
     if (column['fieldType'] === 'action') {
       return (
-        <div style={{ width: 260, textAlign: 'center' }}>
+        <div style={{ width: 150, textAlign: 'center' }}>
+          <Button
+            type="button"
+            onClick={() => props.history.push('<%= entityModelFileName %>/' + entity.id)}
+            icon="pi pi-pencil"
+            className="p-button-warning"
+            style={{ marginRight: '.5em' }}
+            tooltip={translate('entity.action.view')}
+            tooltipOptions={{ position: 'top' }}
+          />
           <Button
             type="button"
             onClick={() => props.history.push('<%= entityModelFileName %>/' + entity.id + '/edit')}
             icon="pi pi-pencil"
             className="p-button-warning"
             style={{ marginRight: '.5em' }}
-            label={translate('entity.action.edit')}
+            tooltip={translate('entity.action.edit')}
+            tooltipOptions={{ position: 'top' }}
           />
           <Button
             type="button"
@@ -310,7 +320,8 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
             icon="pi pi-times"
             className="p-button-danger"
             style={{ marginRight: '.5em' }}
-            label={translate('entity.action.delete')}
+            tooltip={translate('entity.action.delete')}
+            tooltipOptions={{ position: 'top' }}
           />
         </div>
       );
