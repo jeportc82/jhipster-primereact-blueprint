@@ -42,7 +42,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 <%_ } _%>
 import { I<%= entityReactName %>, defaultValue } from 'app/shared/model/<%= entityModelFileName %>.model';
 
-export declare type ICrudGetAllByQueryAction<T> = (query?: any) => IPayload<T> | ((dispatch: any) => IPayload<T>);
+export declare type ICrudGetAllByQueryAction<T> = (query?: any,size?:any,sort?:any,filters?:any) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
 export const ACTION_TYPES = {
   <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -230,8 +230,12 @@ export const getEntities: ICrudGetAllAction<I<%= entityReactName %>> = (page, si
 });
 <%_ } _%>
 
-export const getEntitiesByQuery:ICrudGetAllByQueryAction<I<%= entityReactName %>> = (query) =>
+export const getEntitiesByQuery:ICrudGetAllByQueryAction<I<%= entityReactName %>> = (page,size,sort,filters) =>
 {
+  const query = { page ,size,sort };
+  Object.keys(filters).forEach(key => {
+    query[key + '.' + filters[key].matchMode] = filters[key].value;
+  });
   return {
     type: ACTION_TYPES.FETCH_<%= entityActionName %>_LIST,
     payload: axios.get<I<%= entityReactName %>>(apiUrl, {

@@ -215,6 +215,7 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
     const saveEntity = () => {
       if (!validateRequired()) {
         if (isNew) {
+          entity.id=null;
           props.createEntity(entity);
         } else {
           props.updateEntity(entity);
