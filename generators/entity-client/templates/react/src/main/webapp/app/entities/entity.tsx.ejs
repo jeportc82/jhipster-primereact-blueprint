@@ -103,10 +103,8 @@ import {
   <%_ if (searchEngine === 'elasticsearch') { _%>
   getSearchEntities,
   <%_ } _%>
-  getEntities
-  <%_ if (pagination === 'infinite-scroll') { _%>
-  , reset
-  <%_ } _%>
+  getEntities, 
+  reset
 } from './<%= entityFileName %>.reducer';
 import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
@@ -431,10 +429,10 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   const header = (
     <div className="p-grid">
       <div className="p-col-6" style={{ textAlign: 'left' }}>
-        <Button className="p-button-secondary" label={translate('<%= i18nKeyPrefix %>.home.createLabel')} onClick={()=>props.history.push('<%= entityModelFileName %>/new')} />
+        <Button className="p-button-primary" label={translate('<%= i18nKeyPrefix %>.home.createLabel')} onClick={()=>{props.history.push('<%= entityModelFileName %>/new');props.reset();}} />
       </div>
       <div className="p-col-6" style={{ textAlign: 'right' }}>
-      <Button type="button" className="p-button-secondary" label={translate('<%= i18nKeyPrefix %>.home.showColumns')} onClick={e => op.toggle(e)} />
+      <Button type="button" className="p-button-primary" label={translate('<%= i18nKeyPrefix %>.home.showColumns')} onClick={e => op.toggle(e)} />
         <OverlayPanel ref={el => (op = el)} appendTo={document.body} showCloseIcon={true} dismissable={true}>
           <MultiSelect
             style={{ minWidth: '12em' }}
@@ -598,10 +596,7 @@ const mapDispatchToProps = {
  <%_ if (jpaMetamodelFiltering) { _%>
   getEntitiesByQuery,
  <%_ } _%>
- <%_ if (pagination === 'infinite-scroll') { _%>
  reset
- <%_ } _%>
-
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
