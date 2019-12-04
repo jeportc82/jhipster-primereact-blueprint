@@ -317,7 +317,7 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
                   <RequiredValidation entityField={entity.<%= fieldName %>} />
                   <%_ } _%>
               </div>
-              <%_} else if (['Float', 'Double'].includes(fieldType)) { _%>
+              <%_} else if (['Float', 'Double','BigDecimal'].includes(fieldType)) { _%>
                 <div className="p-col-8"> 
                 <h5>
                   <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">

@@ -560,7 +560,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
                   <%_ } _%>
                   <%_ if (jpaMetamodelFiltering) { _%>
                   filterMatchMode={col.fieldType === 'Enum'||col.fieldType === 'Boolean' ? 'equals' : 'contains'}
-                  filter={col.fieldType === 'action'||col.fieldType.contains('blob')?false:true}
+                  filter={col.fieldType === 'action'||col.fieldType.includes('blob')?false:true}
                   style={col.fieldType === 'action' ? { width: 260 } : col.fieldType === 'Enum' ? { width: 200 } : { width: 100 }}
                   filterElement={filterOptions(col.field,col.fieldType)}
                   <%_ } _%>
