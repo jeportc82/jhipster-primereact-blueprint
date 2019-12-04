@@ -4,8 +4,8 @@
 
 # Introduction
 <div align="center">
-		<img width="320" height="160" src="https://https://github.com/jeportc82/jhipster-primereact-blueprint/master/jhipster-logo.png">
-        <img width="320" height="160" src="https://https://github.com/jeportc82/jhipster-primereact-blueprint/master/primereact-logo.png">
+		<img width="320" height="160" src="https://github.com/jeportc82/jhipster-primereact-blueprint/master/jhipster-logo.png">
+        <img width="320" height="160" src="https://github.com/jeportc82/jhipster-primereact-blueprint/master/primereact-logo.png">
 </div>
 
 This project adds Kotlin to the JHipster application 😎. It is based on JHipster Blueprint
