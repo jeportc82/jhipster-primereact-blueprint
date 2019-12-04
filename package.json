@@ -1,14 +1,14 @@
 {
-  "name": "generator-jhipster-primereact-blueprint",
-  "version": "1.0.1",
-  "description": "",
+  "name": "@jeportc82/generator-jhipster-primereact-blueprint",
+  "version": "1.0.0",
+  "description": "This project adds Primereact to the JHipster React application. It is based on JHipster Blueprint",
   "keywords": [
     "yeoman-generator",
     "jhipster-blueprint",
     "jhipster-5",
     "jhipster-6"
   ],
-  "homepage": "https://github.com/jeportc82/generator-jhipster-primereact-blueprint",
+  "homepage": "https://github.com/jeportc82/jhipster-primereact-blueprint",
   "author": {
     "name": "Jhon Eder Portocarrero",
     "email": "jeportc82@gmail.com",
@@ -20,7 +20,7 @@
   "main": "generators/app/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jeportc82/generator-jhipster-primereact-blueprint.git"
+    "url": "git+https://github.com/jeportc82/jhipster-primereact-blueprint.git"
   },
   "dependencies": {
     "chalk": "2.4.1",
@@ -73,6 +73,6 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jeportc82/generator-jhipster-primereact-blueprint/issues"
+    "url": "https://github.com/jeportc82/jhipster-primereact-blueprint/issues"
   }
 }
