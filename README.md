@@ -4,8 +4,8 @@
 
 # Introduction
 <div align="center">
-	<img width="300" height="300" src="https://github.com/jeportc82/jhipster-primereact-blueprint/blob/master/jhipster-logo.png">
-    <img width="300" height="300" src="https://github.com/jeportc82/jhipster-primereact-blueprint/blob/master/primereact-logo.png">
+	<img width="200" height="200" src="https://github.com/jeportc82/jhipster-primereact-blueprint/blob/master/jhipster-logo.png">
+    <img width="200" height="200" src="https://github.com/jeportc82/jhipster-primereact-blueprint/blob/master/primereact-logo.png">
 </div>
 
 This project adds Primereact to the JHipster React application. It is based on JHipster Blueprint
@@ -101,7 +101,7 @@ MIT © [Jhon Eder Portocarrero]()
 
 
 [npm-image]: https://img.shields.io/npm/v/generator-jhipster-primereact-blueprint.svg
-[npm-url]: https://npmjs.org/package/generator-jhipster-primereact-blueprint
+[npm-url]: https://www.npmjs.com/package/@jeportc82/generator-jhipster-primereact-blueprint
 [travis-image]: https://travis-ci.org/jeportc82/generator-jhipster-primereact-blueprint.svg?branch=master
 [travis-url]: https://travis-ci.org/jeportc82/generator-jhipster-primereact-blueprint
 [daviddm-image]: https://david-dm.org/jeportc82/generator-jhipster-primereact-blueprint.svg?theme=shields.io
