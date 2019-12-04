@@ -100,7 +100,7 @@ function askForClientTheme(meta) {
         when: () => !skipClient,
         message: 'Which theme would you like to use for PrimeReact?',
         choices: defaultChoices,
-        default: 'none'
+        default: 'nova-light'
     };
 
     promptQuestion(PROMPT, done, this);
@@ -123,8 +123,8 @@ function askForClientThemeVariant(meta) {
     if (!meta && this.existingProject) {
         return;
     }
-    if (this.clientTheme === 'none') {
-        this.clientThemeVariant = '';
+    if (this.clientTheme === 'nova-light') {
+        this.clientThemeVariant = 'light';
         return;
     }
 

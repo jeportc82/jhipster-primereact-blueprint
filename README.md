@@ -4,8 +4,8 @@
 
 # Introduction
 <div align="center">
-		<img width="300" height="300" src="https://github.com/jeportc82/jhipster-primereact-blueprint/blob/master/jhipster-logo.png">
-        <img width="300" height="300" src="https://github.com/jeportc82/jhipster-primereact-blueprint/blob/master/primereact-logo.png">
+	<img width="300" height="300" src="https://github.com/jeportc82/jhipster-primereact-blueprint/blob/master/jhipster-logo.png">
+    <img width="300" height="300" src="https://github.com/jeportc82/jhipster-primereact-blueprint/blob/master/primereact-logo.png">
 </div>
 
 This project adds Primereact to the JHipster React application. It is based on JHipster Blueprint

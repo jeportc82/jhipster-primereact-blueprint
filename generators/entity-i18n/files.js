@@ -28,7 +28,6 @@ module.exports = {
 };
 
 function writeFiles() {
-    this.info('hooa');
 
     // writeEnumFiles() {
     this.fields.forEach(field => {
@@ -38,7 +37,6 @@ function writeFiles() {
             // Copy for each
             
             if (!this.skipClient && this.enableTranslation) {
-                this.info('copyEnumllll');
                 const languages = this.languages || this.getAllInstalledLanguages();
                 languages.forEach(language => {
                     this.copyEnumI18n(language, enumInfo, 'templates');
@@ -56,7 +54,6 @@ function writeFiles() {
     if (this.enableTranslation) {
         const languages = this.languages || this.getAllInstalledLanguages();
         languages.forEach(language => {
-            this.info('copyI18nllllll');
             this.copyI18n(language, 'entity-i18n/templates');
             this.copyI18n(language, '/entity-i18n/templates/');
             this.copyI18n(language, './templates');
