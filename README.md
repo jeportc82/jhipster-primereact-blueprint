@@ -4,15 +4,13 @@
 
 # Introduction
 <div align="center">
-		<img width="320" height="160" src="https://github.com/jeportc82/jhipster-primereact-blueprint/blob/master/jhipster-logo.png">
-        <img width="320" height="160" src="https://github.com/jeportc82/jhipster-primereact-blueprint/blob/master/primereact-logo.png">
+		<img width="300" height="300" src="https://github.com/jeportc82/jhipster-primereact-blueprint/blob/master/jhipster-logo.png">
+        <img width="300" height="300" src="https://github.com/jeportc82/jhipster-primereact-blueprint/blob/master/primereact-logo.png">
 </div>
 
-This project adds Kotlin to the JHipster application 😎. It is based on JHipster Blueprint
+This project adds Primereact to the JHipster React application 😎. It is based on JHipster Blueprint
 
 This is a [JHipster](https://www.jhipster.tech/) blueprint, that is meant to be used in a JHipster application.
-
-
 
 
 # Prerequisites
