@@ -3,8 +3,18 @@
 > JHipster blueprint, 
 
 # Introduction
+<div align="center">
+	<a href="https://github.com/jhipster/jhipster-kotlin">
+		<img width="320" height="160" src="https://github.com/jhipster/jhipster-kotlin/blob/master/logo-khipster.png">
+	</a>
+</div>
+
+This project adds Kotlin to the JHipster application 😎. It is based on JHipster Blueprint
 
 This is a [JHipster](https://www.jhipster.tech/) blueprint, that is meant to be used in a JHipster application.
+
+
+
 
 # Prerequisites
 
