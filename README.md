@@ -4,8 +4,9 @@
 
 # Introduction
 <div align="center">
-	<a href="https://github.com/jhipster/jhipster-kotlin">
-		<img width="320" height="160" src="https://github.com/jhipster/jhipster-kotlin/blob/master/logo-khipster.png">
+	<a href="https://github.com/jeportc82/jhipster-primereact-blueprint">
+		<img width="320" height="160" src="https://https://github.com/jeportc82/jhipster-primereact-blueprint/blob/master/jhipster-logo.png">
+        <img width="320" height="160" src="https://https://github.com/jeportc82/jhipster-primereact-blueprint/blob/master/primereact-logo.png">
 	</a>
 </div>
 
