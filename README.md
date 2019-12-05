@@ -12,6 +12,23 @@ This project adds Primereact to the JHipster React application. It is based on J
 
 This is a [JHipster](https://www.jhipster.tech/) blueprint, that is meant to be used in a JHipster application.
 
+# Features
+
+- Filtering is enabled by setting the filter property in entity. 
+- Pagination is enabled by setting paginator property in entity
+- Lazy mode is enabled by default, instead of loading the entire data, small chunks of data is loaded by invoking corresponding callbacks everytime paging, sorting and filtering happens.
+
+<div align="center">
+	<img width="100%" src="https://github.com/jeportc82/jhipster-primereact-blueprint/blob/master/screenshot1.png">
+</div>
+
+- Only primereact Framework is supported.
+- 8 different themes are supprted.
+
+<div align="center">
+	<img width="100%" src="https://github.com/jeportc82/jhipster-primereact-blueprint/blob/master/screenshot2.png">
+    <img width="100%" src="https://github.com/jeportc82/jhipster-primereact-blueprint/blob/master/screenshot3.png">
+</div>
 
 # Prerequisites
 
