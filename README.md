@@ -19,14 +19,14 @@ This is a [JHipster](https://www.jhipster.tech/) blueprint, that is meant to be 
 - Lazy mode is enabled by default, instead of loading the entire data, small chunks of data is loaded by invoking corresponding callbacks everytime paging, sorting and filtering happens.
 
 <div align="center">
-	<img width="100%" src="https://github.com/jeportc82/jhipster-primereact-blueprint/blob/master/screenshot_1.png">
+	<img width="100%" src="https://github.com/jeportc82/jhipster-primereact-blueprint/blob/master/screenshot_1.jpg">
 </div>
 
 - Only primereact Framework is supported.
 - 8 different themes are supprted.
 
 <div align="center">
-	<img width="100%" src="https://github.com/jeportc82/jhipster-primereact-blueprint/blob/master/screenshot_2.png">
+	<img width="100%" src="https://github.com/jeportc82/jhipster-primereact-blueprint/blob/master/screenshot_2.jpg">
     <img width="100%" src="https://github.com/jeportc82/jhipster-primereact-blueprint/blob/master/screenshot_3.jpg">
 </div>
 
