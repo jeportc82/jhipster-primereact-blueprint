@@ -28,6 +28,11 @@ for (const idx in fields) {
 // const variables = query.variables;
 // let hasManyToMany = query.hasManyToMany;
 _%>
+import {
+  Row,
+  Col,
+  Label
+  <% if (haveFieldWithJavadoc) { %>, UncontrolledTooltip<% } %> } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput<% if (fieldsIsReactAvField) { %>, AvField <% } %> } from 'availity-reactstrap-validation';
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
@@ -44,6 +49,8 @@ import {
 } from 'react-jhipster';
 import { IRootState } from 'app/shared/reducers';
 import moment from 'moment';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {InputTextarea} from 'primereact/inputtextarea';
 <%_
 let hasRelationshipQuery = false;
 let otherEntityActions = new Set();
@@ -140,6 +147,12 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
   const [entity, setEntity] = useState<I<%= entityReactName %>>({});
   const [errors, setErrors] = useState(false);
 
+  const { <%= entityInstance %>Entity,<%
+  uniqueRealtionFields.forEach(rel => {
+  %> <%= rel %>,<% }) %> loading, updating } = props;
+
+
+
   <%_ for (idx in fields) {
     const fieldType = fields[idx].fieldType;
     const fieldName = fields[idx].fieldName;
@@ -160,6 +173,24 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
         ],
       <%_ } _%>
       ;
+  <%_ } _%>
+
+  <%_ if (fieldsContainBlob) {_%>
+    const onBlobChange = (isAnImage, name) => event => {
+      setFileData(
+        event,
+        (contentType, data) => {
+          setEntity({ ...entity, [name + 'ContentType']: contentType });
+          setEntity({ ...entity, [name]: data });
+        },
+        isAnImage
+      );
+    };
+
+    const clearBlob = name => () => {
+      setEntity({ ...entity, [name + 'ContentType']: undefined });
+      setEntity({ ...entity, [name]: undefined });
+    };
   <%_ } _%>
 
     useEffect(() => {
@@ -251,9 +282,9 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
             <p>Loading...</p>
         ) : (
         <div>
-          <div className="p-grid p-fluid p-justify-center">
+          <div className="p-grid p-justify-center">
             {!isNew && (
-            <div className="p-col-8">
+            <div className="p-col-8 p-fluid">
               <h5>ID</h5>
               <InputText disabled value={entity && entity.id} />
             </div>
@@ -267,7 +298,7 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
             _%>
          
               <%_ if (fieldType === 'Boolean') { _%>
-              <div className="p-col-8">
+              <div className="p-col-8 p-fluid">
                 <h5>
                   <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>"><%= fieldNameHumanized %></Translate>
                 </h5>
@@ -306,7 +337,7 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
                 <%_ } _%>
               </div>
               <%_ } else if (fields[idx].fieldIsEnum) {_%>
-              <div className="p-col-8"> 
+              <div className="p-col-8 p-fluid"> 
               <h5>
                 <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
                   <%= fieldNameHumanized %>
@@ -318,7 +349,7 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
                 <%_ } _%>
               </div>
               <%_} else if (['Integer', 'Long'].includes(fieldType)) { _%>
-                <div className="p-col-8"> 
+                <div className="p-col-8 p-fluid"> 
                 <h5>
                   <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
                     <%= fieldNameHumanized %>
@@ -330,7 +361,7 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
                   <%_ } _%>
               </div>
               <%_} else if (['Float', 'Double','BigDecimal'].includes(fieldType)) { _%>
-                <div className="p-col-8"> 
+                <div className="p-col-8 p-fluid"> 
                 <h5>
                   <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
                     <%= fieldNameHumanized %>
@@ -341,19 +372,66 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
                   <RequiredValidation entityField={entity.<%= fieldName %>} />
                   <%_ } _%>
               </div>
-              <%_} else if (['byte[]', 'ByteBuffer'].includes(fieldType)) {_%>
-              <div className="p-col-8"> 
-                
+              <%_
+          } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) {
+
+            const fieldBlobType = fields[idx].fieldTypeBlobContent;
+            if (fieldBlobType !== 'text') {
+              const isAnImage = fieldBlobType === 'image';
+              const capitalizedFirstLetter =  _.upperFirst(fieldName);
+
+          _%>
+
+          <div className="p-col-8">
+            <h5 >
+              <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
+                <%= fieldNameHumanized %>
+              </Translate>
+            </h5>
+      
+              <div className="p-grid ">
+                  <div className="col-6">
+                    {entity.<%= fieldName %> ? (
+                    <div>
+                    <a onClick={openFile(entity.<%= fieldName %>ContentType, entity.<%= fieldName %>)}>
+                    <%_ if (isAnImage) { _%>
+                      <img src={`data:${entity.<%= fieldName %>ContentType};base64,${entity.<%= fieldName %>}`} style={{ maxHeight: '100px' }} />
+                    <%_ } else { _%>
+                      <Translate contentKey="entity.action.open">Open</Translate>
+                    <%_ } _%>
+                    </a>
+                    <span style={{marginLeft:10}}>{entity.<%= fieldName %>ContentType}, {byteSize(entity.<%= fieldName %>)}</span>
+                  </div>
+                    ) : null}
+                    <input id="file_<%= fieldName %>" type="file" onChange={onBlobChange(<%= isAnImage %>, '<%= fieldName %>')} <% if (isAnImage) { %>accept="image/*"<% } %> />
+                    <input type="hidden" name="<%= fieldName %>" value={entity.<%= fieldName %>} <%- include react_validators %>/>
+                  </div>
+                  <div className="col-12" style={{textAlign:"right"}}>
+                    <Button className="p-button-danger" label="clear" onClick={clearBlob('<%= fieldName %>')}/>
+                  </div>
               </div>
-              <%_ } else { _%>
-              <div className="p-col-8">
+         
+          </div>
+
+            <%_ } else { _%>
+              <div className="p-col-8 p-fluid">
+              <h5>
+                <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
+                  <%= fieldNameHumanized %>
+                </Translate>
+              </h5>
+              <InputTextarea rows={10}  value={entity.<%= fieldName %> ? entity.<%= fieldName %> : ''} onChange={handleInputChange} />
+            </div>
+            <%_ } _%>
+          <%_ } else { _%>
+              <div className="p-col-8 p-fluid">
                 <h5><Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>"><%= fieldNameHumanized %></Translate></h5>
                 <InputText name="<%= fieldName %>" value={entity.<%= fieldName %> ? entity.<%= fieldName %> : ''} onChange={handleInputChange}/>
                   <%_ if (fields[idx].fieldValidate && fields[idx].fieldValidateRules.includes('required')) { _%>
                   <RequiredValidation entityField={entity.<%= fieldName %>} />
                   <%_ } _%>
               </div>
-              <%_ } _%>
+            <%_ } _%>
             <%_ }_%>
             <%_ relationships.forEach(rel => {
                 const relationshipType = rel.relationshipType;
@@ -387,7 +465,7 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
                       value={entity.<%=otherEntityName%>Id ? entity.<%=otherEntityName%>Id : 0}
                       options={[...props.<%= otherEntityNamePlural %>.map(e=>({label:e.<%=otherEntityField%>,value:e.id}))]}
                       onChange={e => setEntity({ ...entity, <%= relationshipName %>Id: e.value })}
-                      placeholder="Select a Car"
+                      placeholder="Select..."
                     />
                   </div>
                 <%_ } else { _%>
@@ -399,7 +477,7 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
                       value={entity.<%=otherEntityName%>Id ? entity.<%=otherEntityName%>Id : 0}
                       options={[...props.<%= otherEntityNamePlural %>.map(e=>({label:e.<%=otherEntityField%>,value:e.id}))]}
                       onChange={e => setEntity({ ...entity, <%= relationshipName %>Id: e.value })}
-                      placeholder="Select a Car"
+                      placeholder="Select..."
                     />
                   </div>
                 <%_ } _%>
@@ -412,7 +490,7 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
             <div className="p-col-8">
               <Button label="Back" onClick={() => props.history.goBack()} />
                   &nbsp;
-              <Button label="Guardar" onClick={saveEntity} />
+              <Button label="Save" onClick={saveEntity} />
             </div>
           </div>
         </div>  
