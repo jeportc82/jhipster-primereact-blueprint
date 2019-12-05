@@ -4,8 +4,8 @@
 
 # Introduction
 <div align="center">
-	<img width="200" height="200" src="jhipster-logo.png">
-    <img width="200" height="200" src="primereact-logo.png">
+	<img width="200" height="200" src="https://raw.githubusercontent.com/jeportc82/jhipster-primereact-blueprint/HEAD/jhipster-logo.png">
+    <img width="200" height="200" src="https://raw.githubusercontent.com/jeportc82/jhipster-primereact-blueprint/HEAD/primereact-logo.png">
 </div>
 
 This project adds Primereact to the JHipster React application. It is based on JHipster Blueprint
@@ -19,15 +19,15 @@ This is a [JHipster](https://www.jhipster.tech/) blueprint, that is meant to be 
 - Lazy mode is enabled by default, instead of loading the entire data, small chunks of data is loaded by invoking corresponding callbacks everytime paging, sorting and filtering happens.
 
 <div align="center">
-	<img width="100%" src="screenshot_1.jpg">
+	<img width="100%" src="https://raw.githubusercontent.com/jeportc82/jhipster-primereact-blueprint/HEAD/screenshot_1.jpg">
 </div>
 
 - Only primereact Framework is supported.
 - 8 different themes are supprted.
 
 <div align="center">
-	<img width="100%" src="screenshot_2.jpg">
-    <img width="100%" src="screenshot_3.jpg">
+	<img width="100%" src="https://raw.githubusercontent.com/jeportc82/jhipster-primereact-blueprint/HEAD/screenshot_2.jpg">
+    <img width="100%" src="https://raw.githubusercontent.com/jeportc82/jhipster-primereact-blueprint/HEAD/screenshot_3.jpg">
 </div>
 
 # Prerequisites
