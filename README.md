@@ -27,7 +27,7 @@ This is a [JHipster](https://www.jhipster.tech/) blueprint, that is meant to be 
 
 <div align="center">
 	<img width="100%" src="https://github.com/jeportc82/jhipster-primereact-blueprint/blob/master/screenshot_2.png">
-    <img width="100%" src="https://github.com/jeportc82/jhipster-primereact-blueprint/blob/master/screenshot_3.png">
+    <img width="100%" src="https://github.com/jeportc82/jhipster-primereact-blueprint/blob/master/screenshot_3.jpg">
 </div>
 
 # Prerequisites
