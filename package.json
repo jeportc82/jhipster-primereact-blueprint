@@ -1,5 +1,5 @@
 {
-  "name": "@jeportc82/generator-jhipster-primereact-blueprint",
+  "name": "generator-jhipster-primereact-blueprint",
   "version": "1.0.0",
   "description": "This project adds Primereact to the JHipster React application. It is based on JHipster Blueprint",
   "keywords": [
