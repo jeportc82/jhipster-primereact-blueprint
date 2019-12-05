@@ -7,8 +7,7 @@
 	<img width="200" height="200" src="jhipster-logo.png">
     <img width="200" height="200" src="primereact-logo.png">
 </div>
-![alt text](screenshot_1.jpg)
-![logo](https://github.com/jeportc82/jhipster-primereact-blueprint/blob/master/jhipster-logo.png)
+
 This project adds Primereact to the JHipster React application. It is based on JHipster Blueprint
 
 This is a [JHipster](https://www.jhipster.tech/) blueprint, that is meant to be used in a JHipster application.
