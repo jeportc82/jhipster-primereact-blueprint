@@ -227,6 +227,16 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
     }
 
     const RequiredValidation = ({ entityField }) => errors && !entityField && <Message severity="error" text={translate('entity.validation.required')} />;
+    
+    const handleInputChange = (event:any) => {
+      const { name, value } = event.currentTarget;
+      setEntity({ ...entity, [name]: value });
+    };
+
+    const handleChange = (event:any) => {
+      const { name, value } = event.target;
+      setEntity({ ...entity, [name]: value });
+    };
 
     return (
       <>
@@ -245,7 +255,7 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
             {!isNew && (
             <div className="p-col-8">
               <h5>ID</h5>
-              <InputText value={entity && entity.id} />
+              <InputText disabled value={entity && entity.id} />
             </div>
             )}
             <%_ for (idx in fields) {
@@ -261,7 +271,7 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
                 <h5>
                   <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>"><%= fieldNameHumanized %></Translate>
                 </h5>
-                <Checkbox checked={entity.<%= fieldName %>} onChange={e => setEntity({ ...entity, <%= fieldName %>: e.value })} ></Checkbox>
+                <Checkbox checked={entity.<%= fieldName %>} onChange={handleChange} ></Checkbox>
               </div>
               <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
               <div className="p-col-8"> 
@@ -269,8 +279,9 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
                   <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>"><%= fieldNameHumanized %></Translate>
                 </h5>
                 <Calendar
+                  name="<%= fieldName %>"
                   value={convertDateTimeToServer(entity.<%= fieldName %>)}
-                  onChange={e => setEntity({ ...entity, <%= fieldName %>: moment(e.value.valueOf()) })}
+                  onChange={handleChange}
                   showTime={true}
                   showSeconds={true}
                   hideOnDateTimeSelect
@@ -285,9 +296,10 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
                   <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>"><%= fieldNameHumanized %></Translate>
                 </h5>
                 <Calendar
+                  name="<%= fieldName %>"
                   hideOnDateTimeSelect
                   value={convertDateTimeToServer(entity.<%= fieldName %>)}
-                  onChange={e => setEntity({ ...entity, <%= fieldName %>: moment(e.value.valueOf()) })}
+                  onChange={handleChange}
                 />
                 <%_ if (fields[idx].fieldValidate && fields[idx].fieldValidateRules.includes('required')) { _%>
                   <RequiredValidation entityField={entity.<%= fieldName %>} />
@@ -300,7 +312,7 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
                   <%= fieldNameHumanized %>
                 </Translate>
               </h5>
-              <Dropdown value={entity.<%= fieldName %>} options={<%= fieldName %>Options} onChange={e => setEntity({ ...entity, <%= fieldName %>: e.value})}  placeholder="Select a Car"/>
+              <Dropdown name="<%= fieldName %>" value={entity.<%= fieldName %>} options={<%= fieldName %>Options} onChange={handleChange}  placeholder="Select a Car"/>
                 <%_ if (fields[idx].fieldValidate && fields[idx].fieldValidateRules.includes('required')) { _%>
                   <RequiredValidation entityField={entity.<%= fieldName %>} />
                 <%_ } _%>
@@ -312,7 +324,7 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
                     <%= fieldNameHumanized %>
                   </Translate>
                 </h5>
-                <Spinner value={entity.<%= fieldName %> ? entity.<%= fieldName %> : 0} onChange={e => setEntity({ ...entity, <%= fieldName %>: e.value })} />
+                <Spinner name="<%= fieldName %>" value={entity.<%= fieldName %> ? entity.<%= fieldName %> : 0} onChange={handleChange} />
                   <%_ if (fields[idx].fieldValidate && fields[idx].fieldValidateRules.includes('required')) { _%>
                   <RequiredValidation entityField={entity.<%= fieldName %>} />
                   <%_ } _%>
@@ -324,7 +336,7 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
                     <%= fieldNameHumanized %>
                   </Translate>
                 </h5>
-                <Spinner value={entity.<%= fieldName %> ? entity.<%= fieldName %> : 0} onChange={e => setEntity({ ...entity, <%= fieldName %>: e.value })} step={0.01} />
+                <Spinner name="<%= fieldName %>" value={entity.<%= fieldName %> ? entity.<%= fieldName %> : 0} onChange={handleChange} step={0.01} />
                   <%_ if (fields[idx].fieldValidate && fields[idx].fieldValidateRules.includes('required')) { _%>
                   <RequiredValidation entityField={entity.<%= fieldName %>} />
                   <%_ } _%>
@@ -336,7 +348,7 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
               <%_ } else { _%>
               <div className="p-col-8">
                 <h5><Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>"><%= fieldNameHumanized %></Translate></h5>
-                <InputText value={entity.<%= fieldName %> ? entity.<%= fieldName %> : ''} onChange={e => setEntity({ ...entity, <%= fieldName %>: e.currentTarget.value.toString() })}/>
+                <InputText name="<%= fieldName %>" value={entity.<%= fieldName %> ? entity.<%= fieldName %> : ''} onChange={handleInputChange}/>
                   <%_ if (fields[idx].fieldValidate && fields[idx].fieldValidateRules.includes('required')) { _%>
                   <RequiredValidation entityField={entity.<%= fieldName %>} />
                   <%_ } _%>
