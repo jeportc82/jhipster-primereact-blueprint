@@ -168,19 +168,45 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
     const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized; _%>
     <%_ if (relationshipType === 'many-to-one'
     || (relationshipType === 'one-to-one' && ownerSide === true)
-    || (relationshipType === 'many-to-many' && ownerSide === true && pagination === 'no')) { _%>
-    <%_ if (dto === 'no') { _%>
-      {
-        field:'<%=fields[idx].fieldName%>',
-        fieldType:'String',
-        header: translate('<%= i18nKeyPrefix %>.<%=fields[idx].fieldName%>')
-      },
+    || (relationshipType === 'many-to-many' && ownerSide === true )) { _%>
+    <%_ if (otherEntityName === 'user') { _%>
+      <%_ if (relationshipType === 'many-to-many') { _%>
+        {
+          {
+            field:'<%=relationshipFieldNamePlural%>',
+            fieldType: 'List',
+            header: translate('<%= i18nKeyPrefix %>.<%= relationshipFieldNamePlural%>')
+          },
+        }
+      <%_ } else { _%>
+        <%_ if (dto === 'no') { _%>
+
+        <%_ } else { _%>
+          {
+            field:'<%=relationshipFieldName + otherEntityFieldCapitalized%>',
+            fieldType: 'Long',
+            header: translate('<%= i18nKeyPrefix %>.<%= relationshipFieldName%>')
+          },
+        <%_ } _%>
+      <%_ } _%>
     <%_ } else { _%>
-      {
-        field:'<%=relationshipFieldName%>Id',
-        fieldType:'Long',
-        header: translate('<%= i18nKeyPrefix %>.<%= relationshipFieldName%>')
-      },
+      <%_ if (relationshipType === 'many-to-many') { _%>
+        {
+            field:'<%=relationshipFieldNamePlural%>',
+            fieldType: 'List',
+            header: translate('<%= i18nKeyPrefix %>.<%= relationshipFieldName%>')
+        },
+      <%_ } else { _%>
+         <%_ if (dto === 'no') { _%>
+
+        <%_ } else { _%>
+          {
+            field:'<%=relationshipFieldName + otherEntityFieldCapitalized%>',
+            fieldType: 'Long',
+            header: translate('<%= i18nKeyPrefix %>.<%= relationshipFieldName%>')
+          },
+        <%_ } _%>
+      <%_ } _%>
     <%_ } _%>
   <%_ } _%>
   <%_ } _%>
@@ -210,6 +236,29 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   <%_ if (jpaMetamodelFiltering) { _%>
   const [filters, setFilters] = useState({});
   <%_ } _%>
+  const manyToManyProperties={
+  <%_ for (idx in relationships) {
+    const relationshipType = relationships[idx].relationshipType;
+    const ownerSide = relationships[idx].ownerSide;
+    const relationshipFieldName = relationships[idx].relationshipFieldName;
+    const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
+    const otherEntityName = relationships[idx].otherEntityName;
+    const otherEntityStateName = relationships[idx].otherEntityStateName;
+    const otherEntityField = relationships[idx].otherEntityField;
+    const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized; _%>
+    <%_ if ((relationshipType === 'many-to-many' && ownerSide === true )) { _%>
+      <%_ if (otherEntityName !== 'user') { _%>
+        <%_ if (relationshipType === 'many-to-many') { _%>
+          <%=relationshipFieldNamePlural%>:'<%=otherEntityField%>',         
+        <%_ } _%>
+      <%_ } _%>
+    <%_ } _%>
+  <%_ } _%>
+}
+
+
+
+
 
   <%_ if (pagination === 'pagination' || pagination === 'pager' || pagination === 'infinite-scroll' || pagination !== 'no' && pagination !== 'infinite-scroll') { _%>
   const getAllEntities = () => {
@@ -511,6 +560,16 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
               </span>
             </div>
           ) : null}
+        </div>
+      );
+    } else if (column['fieldType'] === 'List') {
+      return (
+        <div>
+          <ul>
+            {entity[column['field']].map(val => (
+              <li key={val.id}>{val[manyToManyProperties[column['field']]]}</li>
+            ))}
+          </ul>
         </div>
       );
     } else {
