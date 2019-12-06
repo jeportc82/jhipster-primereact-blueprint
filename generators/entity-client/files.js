@@ -22,6 +22,7 @@ const utils = require('../utils');
 const constants = require('../generator-constants');
 
 /* Constants use throughout */
+const REACT_DIR = constants.ANGULAR_DIR;
 const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 const CLIENT_REACT_TEMPLATES_DIR = 'react';
 
@@ -116,8 +117,7 @@ const reactFiles = {
 };
 
 module.exports = {
-    writeFiles,
-    reactFiles
+    writeFiles
 };
 
 function addEnumerationFiles(generator, templateDir, clientFolder) {
