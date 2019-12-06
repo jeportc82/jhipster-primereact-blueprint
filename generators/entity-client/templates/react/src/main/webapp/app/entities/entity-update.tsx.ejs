@@ -28,13 +28,6 @@ for (const idx in fields) {
 // const variables = query.variables;
 // let hasManyToMany = query.hasManyToMany;
 _%>
-import {
-  Row,
-  Col,
-  Label
-  <% if (haveFieldWithJavadoc) { %>, UncontrolledTooltip<% } %> } from 'reactstrap';
-import { AvFeedback, AvForm, AvGroup, AvInput<% if (fieldsIsReactAvField) { %>, AvField <% } %> } from 'availity-reactstrap-validation';
-import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
@@ -49,8 +42,8 @@ import {
 } from 'react-jhipster';
 import { IRootState } from 'app/shared/reducers';
 import moment from 'moment';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {InputTextarea} from 'primereact/inputtextarea';
+import {ListBox} from 'primereact/listbox';
 <%_
 let hasRelationshipQuery = false;
 let otherEntityActions = new Set();
@@ -138,20 +131,11 @@ export interface I<%= entityReactName %>UpdateProps extends StateProps, Dispatch
 
 const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)=> {
   const [isNew, setIsNew] = useState(!props.match.params || !props.match.params.id);
-  <%_ manyToManyOwners.forEach(val => { _%>
-  const [ids<%= val.relationshipName %>, setIds<%= val.relationshipName %>] = useState([]);
-  <%_ }) _%>
   <%_ relFieldNames.forEach(val => { _%>
   const [<%= val.relationshipFieldName %>Id, set<%= _.upperFirst(val.relationshipFieldName) %>] = useState('0');
   <%_ }) _%>
   const [entity, setEntity] = useState<I<%= entityReactName %>>({});
   const [errors, setErrors] = useState(false);
-
-  const { <%= entityInstance %>Entity,<%
-  uniqueRealtionFields.forEach(rel => {
-  %> <%= rel %>,<% }) %> loading, updating } = props;
-
-
 
   <%_ for (idx in fields) {
     const fieldType = fields[idx].fieldType;
@@ -286,7 +270,7 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
             {!isNew && (
             <div className="p-col-8 p-fluid">
               <h5>ID</h5>
-              <InputText disabled value={entity && entity.id} />
+              <InputText disabled value={entity.id ? entity.id : ''} />
             </div>
             )}
             <%_ for (idx in fields) {
@@ -404,7 +388,7 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
                   </div>
                     ) : null}
                     <input id="file_<%= fieldName %>" type="file" onChange={onBlobChange(<%= isAnImage %>, '<%= fieldName %>')} <% if (isAnImage) { %>accept="image/*"<% } %> />
-                    <input type="hidden" name="<%= fieldName %>" value={entity.<%= fieldName %>} <%- include react_validators %>/>
+                    <input type="hidden" name="<%= fieldName %>" value={entity.<%= fieldName %>?entity.<%= fieldName %>:''} <%- include react_validators %>/>
                   </div>
                   <div className="col-12" style={{textAlign:"right"}}>
                     <Button className="p-button-danger" label="clear" onClick={clearBlob('<%= fieldName %>')}/>
@@ -451,9 +435,17 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
 
               <%_ if (dto === 'no') { _%>
                   <%_ if (!relationshipRequired) { _%>
-
+                    <MultiSelect 
+                      value={entity.<%=otherEntityName%>Id ? entity.<%=otherEntityName%>Id : 0} 
+                      options={[...props.<%= otherEntityNamePlural %>.map(e=>({label:e.<%=otherEntityField%>,value:e.id}))]}
+                      onChange={(e) => this.setState({cities: e.value})} 
+                      placeholder="Select..."/>
                   <%_ } else { _%>
-
+                    <List 
+                      value={entity.<%=otherEntityName%>Id ? entity.<%=otherEntityName%>Id : 0} 
+                      options={[...props.<%= otherEntityNamePlural %>.map(e=>({label:e.<%=otherEntityField%>,value:e.id}))]}
+                      onChange={(e) => this.setState({cities: e.value})} 
+                      placeholder="Select... required"/>
                   <%_ } _%>
               <%_ } else { _%>
                 <%_ if (!relationshipRequired) { _%>
@@ -483,7 +475,42 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
                 <%_ } _%>
               <%_ } _%>
 
+              <%_ } else if (relationshipType === 'one-to-one' && ownerSide === true) { _%>
+                <div className="p-col-8">
+            <h5 >
+              <Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate>
+            </h5>
+              <%_ if (dto === 'no') { _%>
+                <Dropdown
+                      value={entity.<%=otherEntityName%>Id ? entity.<%=otherEntityName%>Id : 0}
+                      options={[...props.<%= otherEntityNamePlural %>.map(e=>({label:e.<%=otherEntityField%>,value:e.id}))]}
+                      onChange={e => setEntity({ ...entity, <%= relationshipName %>Id: e.value })}
+                      placeholder="Select..."
+                    />
+              <%_ } else { _%>
+                <Dropdown
+                      value={entity.<%=otherEntityName%>Id ? entity.<%=otherEntityName%>Id : 0}
+                      options={[...props.<%= otherEntityNamePlural %>.map(e=>({label:e.<%=otherEntityField%>,value:e.id}))]}
+                      onChange={e => setEntity({ ...entity, <%= relationshipName %>Id: e.value })}
+                      placeholder="Select..."
+                    />
               <%_ } _%>
+          </div>
+          <%_ } else if (relationshipType === 'many-to-many' && rel.ownerSide === true) { _%>
+            <div className="p-col-8 p-fluid">
+            <h5 >
+              <Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate>
+            </h5>
+            <ListBox
+              value={entity.<%=relationshipFieldNamePlural%>? entity.<%=relationshipFieldNamePlural%> : 0}
+              options={[...props.<%= otherEntityNamePlural %>.map(e=>({label:e.<%=otherEntityField%>,value:e}))]}
+              onChange={e => setEntity({ ...entity, <%= relationshipFieldNamePlural %>: e.value })}
+              listStyle={{maxHeight: '150px'}}
+              multiple
+              filter
+            />
+            </div>
+          <%_ } _%>
           <%_ }) _%>
           </div>
           <div className="p-grid p-justify-center">

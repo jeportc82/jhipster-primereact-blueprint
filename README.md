@@ -1,5 +1,7 @@
 # Jhipster Primereact Blueprint
-[![NPM version][npm-image]][npm-url] ![Crates.io](https://img.shields.io/github/license/mashape/apistatus.svg) 
+[![NPM version][npm-image]][npm-url] 
+
+[ ![Crates.io](https://img.shields.io/github/license/mashape/apistatus.svg) 
 > JHipster blueprint, 
 
 # Introduction
@@ -123,3 +125,4 @@ MIT © [Jhon Eder Portocarrero]()
 [travis-url]: https://travis-ci.org/jeportc82/generator-jhipster-primereact-blueprint
 [daviddm-image]: https://david-dm.org/jeportc82/generator-jhipster-primereact-blueprint.svg?theme=shields.io
 [daviddm-url]: https://david-dm.org/jeportc82/generator-jhipster-primereact-blueprint
+[npmcharts-image]: https://img.shields.io/npm/dm/generator-jhipster-primereact-blueprint?label=Downloads&style=flat
