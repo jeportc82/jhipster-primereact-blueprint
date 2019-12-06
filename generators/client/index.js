@@ -3,7 +3,6 @@ const chalk = require('chalk');
 const ClientGenerator = require('generator-jhipster/generators/client');
 const writeReactFiles = require('./files-react').writeFiles;
 const prompts = require('./prompts');
-// const writeAngularFiles = require('./files-angular').writeFiles;
 
 module.exports = class extends ClientGenerator {
     constructor(args, opts) {
