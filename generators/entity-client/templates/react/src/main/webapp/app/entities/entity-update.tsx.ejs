@@ -435,15 +435,15 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
 
               <%_ if (dto === 'no') { _%>
                   <%_ if (!relationshipRequired) { _%>
-                    <MultiSelect 
-                      value={entity.<%=otherEntityName%>Id ? entity.<%=otherEntityName%>Id : 0} 
-                      options={[...props.<%= otherEntityNamePlural %>.map(e=>({label:e.<%=otherEntityField%>,value:e.id}))]}
+                    <Dropdown 
+                      value={entity.<%=relationshipName%>Id ? entity.<%=relationshipName%>Id : 0} 
+                      options={[...props.<%= relationshipFieldNamePlural %>.map(e=>({label:e.<%=otherEntityField%>,value:e.id}))]}
                       onChange={(e) => this.setState({cities: e.value})} 
                       placeholder="Select..."/>
                   <%_ } else { _%>
-                    <List 
-                      value={entity.<%=otherEntityName%>Id ? entity.<%=otherEntityName%>Id : 0} 
-                      options={[...props.<%= otherEntityNamePlural %>.map(e=>({label:e.<%=otherEntityField%>,value:e.id}))]}
+                    <Dropdown 
+                      value={entity.<%=relationshipName%>Id ? entity.<%=relationshipName%>Id : 0} 
+                      options={[...props.<%= relationshipFieldNamePlural %>.map(e=>({label:e.<%=otherEntityField%>,value:e.id}))]}
                       onChange={(e) => this.setState({cities: e.value})} 
                       placeholder="Select... required"/>
                   <%_ } _%>
@@ -454,8 +454,8 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
                       <Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate>
                     </h5>
                     <Dropdown
-                      value={entity.<%=otherEntityName%>Id ? entity.<%=otherEntityName%>Id : 0}
-                      options={[...props.<%= otherEntityNamePlural %>.map(e=>({label:e.<%=otherEntityField%>,value:e.id}))]}
+                      value={entity.<%=relationshipName%>Id ? entity.<%=relationshipName%>Id : 0}
+                      options={[...props.<%= relationshipFieldNamePlural %>.map(e=>({label:e.<%=otherEntityField%>,value:e.id}))]}
                       onChange={e => setEntity({ ...entity, <%= relationshipName %>Id: e.value })}
                       placeholder="Select..."
                     />
@@ -466,8 +466,8 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
                       <Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate>
                     </h5>
                     <Dropdown
-                      value={entity.<%=otherEntityName%>Id ? entity.<%=otherEntityName%>Id : 0}
-                      options={[...props.<%= otherEntityNamePlural %>.map(e=>({label:e.<%=otherEntityField%>,value:e.id}))]}
+                      value={entity.<%=relationshipName%>Id ? entity.<%=relationshipName%>Id : 0}
+                      options={[...props.<%= relationshipFieldNamePlural %>.map(e=>({label:e.<%=otherEntityField%>,value:e.id}))]}
                       onChange={e => setEntity({ ...entity, <%= relationshipName %>Id: e.value })}
                       placeholder="Select..."
                     />
@@ -482,15 +482,15 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
             </h5>
               <%_ if (dto === 'no') { _%>
                 <Dropdown
-                      value={entity.<%=otherEntityName%>Id ? entity.<%=otherEntityName%>Id : 0}
-                      options={[...props.<%= otherEntityNamePlural %>.map(e=>({label:e.<%=otherEntityField%>,value:e.id}))]}
+                      value={entity.<%=relationshipName%>Id ? entity.<%=relationshipName%>Id : 0}
+                      options={[...props.<%= relationshipFieldNamePlural %>.map(e=>({label:e.<%=otherEntityField%>,value:e.id}))]}
                       onChange={e => setEntity({ ...entity, <%= relationshipName %>Id: e.value })}
                       placeholder="Select..."
                     />
               <%_ } else { _%>
                 <Dropdown
-                      value={entity.<%=otherEntityName%>Id ? entity.<%=otherEntityName%>Id : 0}
-                      options={[...props.<%= otherEntityNamePlural %>.map(e=>({label:e.<%=otherEntityField%>,value:e.id}))]}
+                      value={entity.<%=relationshipName%>Id ? entity.<%=relationshipName%>Id : 0}
+                      options={[...props.<%= relationshipFieldNamePlural %>.map(e=>({label:e.<%=otherEntityField%>,value:e.id}))]}
                       onChange={e => setEntity({ ...entity, <%= relationshipName %>Id: e.value })}
                       placeholder="Select..."
                     />
@@ -502,8 +502,8 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
               <Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate>
             </h5>
             <ListBox
-              value={entity.<%=relationshipFieldNamePlural%>? entity.<%=relationshipFieldNamePlural%> : 0}
-              options={[...props.<%= otherEntityNamePlural %>.map(e=>({label:e.<%=otherEntityField%>,value:e}))]}
+              value={entity.<%=relationshipFieldNamePlural%>? entity.<%=relationshipFieldNamePlural%> : []}
+              options={[...props.<%= relationshipFieldNamePlural %>.map(e=>({label:e.<%=otherEntityField%>,value:e}))]}
               onChange={e => setEntity({ ...entity, <%= relationshipFieldNamePlural %>: e.value })}
               listStyle={{maxHeight: '150px'}}
               multiple
