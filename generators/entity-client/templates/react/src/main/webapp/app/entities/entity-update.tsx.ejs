@@ -449,7 +449,7 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
                   <%_ } _%>
               <%_ } else { _%>
                 <%_ if (!relationshipRequired) { _%>
-                  <div className="p-col-8">
+                  <div className="p-col-8 p-fluid">
                     <h5>
                       <Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate>
                     </h5>
@@ -461,7 +461,7 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
                     />
                   </div>
                 <%_ } else { _%>
-                  <div className="p-col-8">
+                  <div className="p-col-8 p-fluid">
                     <h5>
                       <Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate>
                     </h5>
@@ -476,7 +476,7 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
               <%_ } _%>
 
               <%_ } else if (relationshipType === 'one-to-one' && ownerSide === true) { _%>
-                <div className="p-col-8">
+                <div className="p-col-8 p-fluid">
             <h5 >
               <Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate>
             </h5>
