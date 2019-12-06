@@ -1,7 +1,6 @@
 # Jhipster Primereact Blueprint
-[![NPM version][npm-image]][npm-url] 
-
-[ ![Crates.io](https://img.shields.io/github/license/mashape/apistatus.svg) 
+[![NPM version][npm-image]][npm-url] ![Downloads][npmcharts-image]
+ ![Crates.io](https://img.shields.io/github/license/mashape/apistatus.svg) 
 > JHipster blueprint, 
 
 # Introduction
