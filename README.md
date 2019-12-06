@@ -4,8 +4,6 @@
 ![Downloads][npmcharts-image] 
 ![Crates.io](https://img.shields.io/github/license/mashape/apistatus.svg) 
 
-> JHipster blueprint, 
-
 # Introduction
 <div align="center">
 	<img width="200" height="200" src="https://raw.githubusercontent.com/jeportc82/jhipster-primereact-blueprint/HEAD/jhipster-logo.png">
