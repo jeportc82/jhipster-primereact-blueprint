@@ -25,11 +25,19 @@ This is a [JHipster](https://www.jhipster.tech/) blueprint, that is meant to be 
 </div>
 
 - Only primereact Framework is supported.
-- 8 different themes are supprted.
-
 <div align="center">
 	<img width="100%" src="https://raw.githubusercontent.com/jeportc82/jhipster-primereact-blueprint/HEAD/screenshot_2.jpg">
     <img width="100%" src="https://raw.githubusercontent.com/jeportc82/jhipster-primereact-blueprint/HEAD/screenshot_3.jpg">
+</div>
+- 8 different themes are supprted.
+
+<div align="center">
+	<img width="100%" src="https://raw.githubusercontent.com/jeportc82/jhipster-primereact-blueprint/HEAD/screenshot_4.jpg">
+    <img width="100%" src="https://raw.githubusercontent.com/jeportc82/jhipster-primereact-blueprint/HEAD/screenshot_5.jpg">
+</div>
+<div align="center">
+	<img width="100%" src="https://raw.githubusercontent.com/jeportc82/jhipster-primereact-blueprint/HEAD/screenshot_6.jpg">
+    <img width="100%" src="https://raw.githubusercontent.com/jeportc82/jhipster-primereact-blueprint/HEAD/screenshot_7.jpg">
 </div>
 
 # Prerequisites
