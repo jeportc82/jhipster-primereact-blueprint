@@ -17,32 +17,22 @@
  limitations under the License.
 -%>
 import React, { useState, useEffect } from 'react';
-import { translate } from 'react-jhipster';
 <%_ if (pagination === 'infinite-scroll') { _%>
 import InfiniteScroll from 'react-infinite-scroller';
 <%_ } _%>
 import { connect } from 'react-redux';
-import { Link, RouteComponentProps } from 'react-router-dom';
-import { <% if (searchEngine === 'elasticsearch') { %>InputGroup, <% } %>Col, Row, Table } from 'reactstrap';
+import { RouteComponentProps } from 'react-router-dom';
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 <%_ } _%>
 import {
+  translate ,
   <%_ if (fieldsContainBlob) { _%>
     setFileData,
     <% if (fieldsContainBlobOrImage) { %> openFile,<% } %>
     byteSize,
   <%_ } _%>
-  Translate<% if (searchEngine === 'elasticsearch') { %>, translate, ICrudSearchAction<% } %>,
-  ICrudGetAllAction<% if (fieldsContainDate) { %>, TextFormat<% } %>
-  <%_ if (pagination !== 'no') { _%>
-  , getSortState, IPaginationBaseState
-  <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
-  , JhiPagination, JhiItemCount
-  <%_ }} _%>
 } from 'react-jhipster';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 import { IRootState } from 'app/shared/reducers';
 <%_
 let hasRelationshipQuery = false;
@@ -75,11 +65,15 @@ Object.keys(differentRelationships).forEach(key => {
       action: `get${upperFirstCamelCase(uniqueRel.otherEntityNamePlural)}`,
       instance: `${uniqueRel.otherEntityNamePlural}`,
       entity: uniqueRel.otherEntityAngularName,
-      reducer: uniqueRel.otherEntityAngularName === 'User' ? 'userManagement' : uniqueRel.otherEntityName
+      reducer: uniqueRel.otherEntityAngularName === 'User' ? 'userManagement' : uniqueRel.otherEntityName,
+      entityField: uniqueRel.otherEntityField,
+      ownerSide:uniqueRel.ownerSide,
+      test: uniqueRel.relationshipType==='one-to-one'&&JSON.stringify(uniqueRel),
+      relationshipType: uniqueRel.relationshipType,
+      relationshipFieldName: uniqueRel.relationshipFieldName,
     });
     if (uniqueRel.otherEntityAngularName === 'User') {
 _%>
-import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/user.model';
 <%_ if (authenticationType === 'oauth2') { _%>
 import { getUsers } from 'app/shared/reducers/user-management';
 <%_ } else { _%>
@@ -89,7 +83,6 @@ import { getUsers } from 'app/modules/administration/user-management/user-manage
   } else {
     if (uniqueRel.otherEntityAngularName !== entityReactName) {
 _%>
-import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/<%= uniqueRel.otherEntityModelName %>.model';
   <%_ } _%>
 import { getEntities as get<%= upperFirstCamelCase(uniqueRel.otherEntityNamePlural) %> } from 'app/entities/<%= uniqueRel.otherEntityPath %>/<%= uniqueRel.otherEntityFileName %>.reducer';
 <%_ }
@@ -105,17 +98,11 @@ import {
   getEntities, 
   reset
 } from './<%= entityFileName %>.reducer';
-import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
-import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
-<%_ if (pagination !== 'no') { _%>
-import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
-<%_ } _%>
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { MultiSelect } from 'primereact/multiselect';
 import { OverlayPanel } from 'primereact/overlaypanel';
 import { InputText } from 'primereact/inputtext';
-import { Dropdown } from 'primereact/dropdown';
 import { Button } from 'primereact/button';
 import {Calendar} from 'primereact/calendar';
 import moment from 'moment';
@@ -128,20 +115,14 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   let op:any;
   let dt:any;
   const cols = [
-  {
-    field:'id',
-    fieldType:'Long',
-    header: 'Id'
-  },
+  { field:'id', fieldType:'Long' },
   <%_ for (idx in fields) { 
     const fieldType = fields[idx].fieldType;
     const fieldName = fields[idx].fieldName;
     const fieldIsEnum = fields[idx].fieldIsEnum;
     _%>
-    {
-    field:'<%=fieldName%>',
-    <%_if (fieldIsEnum && enableTranslation){_%>
-    fieldType:'Enum',
+    {field:'<%=fieldName%>', 
+    <%_if (fieldIsEnum && enableTranslation){_%> fieldType:'Enum',
     <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
     <%_ if (fields[idx].fieldTypeBlobContent === 'image') { _%>
     fieldType:'blobImage',
@@ -153,7 +134,6 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
     <%_} else {_%>
     fieldType:'<%=fieldType%>',
     <%_ } _%>
-    header: translate('<%= i18nKeyPrefix %>.<%=fields[idx].fieldName%>'),
     },
   <%_ } _%>
   <%_ for (idx in relationships) {
@@ -169,51 +149,21 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
     || (relationshipType === 'one-to-one' && ownerSide === true)
     || (relationshipType === 'many-to-many' && ownerSide === true )) { _%>
     <%_ if (otherEntityName === 'user') { _%>
-      <%_ if (relationshipType === 'many-to-many') { _%>
-        {
-          {
-            field:'<%=relationshipFieldNamePlural%>',
-            fieldType: 'List',
-            header: translate('<%= i18nKeyPrefix %>.<%= relationshipFieldNamePlural%>')
-          },
-        }
+      <%_ if (dto === 'no') { _%>
+        { field:'<%=relationshipFieldName%>', fieldType: 'String' },
       <%_ } else { _%>
-        <%_ if (dto === 'no') { _%>
-
-        <%_ } else { _%>
-          {
-            field:'<%=relationshipFieldName + otherEntityFieldCapitalized%>',
-            fieldType: 'Long',
-            header: translate('<%= i18nKeyPrefix %>.<%= relationshipFieldName%>')
-          },
-        <%_ } _%>
+        { field:'<%=relationshipFieldName%>', fieldType: 'Relationship', otherEntityFieldCapitalized:'<%=otherEntityFieldCapitalized%>' },
       <%_ } _%>
     <%_ } else { _%>
-      <%_ if (relationshipType === 'many-to-many') { _%>
-        {
-            field:'<%=relationshipFieldNamePlural%>',
-            fieldType: 'List',
-            header: translate('<%= i18nKeyPrefix %>.<%= relationshipFieldName%>')
-        },
-      <%_ } else { _%>
-         <%_ if (dto === 'no') { _%>
-
+      <%_ if (dto === 'no') { _%>
+         { field:'<%=relationshipFieldName%>', fieldType: 'String' },
         <%_ } else { _%>
-          {
-            field:'<%=relationshipFieldName + otherEntityFieldCapitalized%>',
-            fieldType: 'Long',
-            header: translate('<%= i18nKeyPrefix %>.<%= relationshipFieldName%>')
-          },
+          { field:'<%=relationshipFieldName%>', fieldType: 'Relationship', otherEntityFieldCapitalized:'<%=otherEntityFieldCapitalized%>' },
         <%_ } _%>
-      <%_ } _%>
     <%_ } _%>
   <%_ } _%>
   <%_ } _%>
-    {
-      field:'actions',
-      fieldType:'action',
-      header: '',
-    }
+    { field:'entityActionsCRUD', fieldType:'entityActionsCRUD' }
     ]
 
 
@@ -234,6 +184,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   <%_ } _%>
   <%_ if (jpaMetamodelFiltering) { _%>
   const [filters, setFilters] = useState({});
+  const [relationshipOptions, setRelationshipOptions] = useState({});
   <%_ } _%>
   const manyToManyProperties={
   <%_ for (idx in relationships) {
@@ -298,6 +249,9 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
     <%_ } else { _%>
     props.getEntities();
     <%_ } _%>
+    <%_ otherEntityActions.forEach(val => { _%>
+      props.<%= val.action %>();
+    <%_ }) _%>
   }, []);
 
   <%_ if (pagination === 'infinite-scroll') { _%>
@@ -388,77 +342,80 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
       setFilters(event.filters);
       props.getEntitiesByQuery(first / rows, rows,  `${sortField},${sortOrder===1?'asc':'desc'}`, event.filters );
     };
-  
-    const filterEnumOptions = {
-    <%_ for (idx in fields) {
-      const fieldType = fields[idx].fieldType;
-      const fieldName = fields[idx].fieldName;
-      const fieldNameHumanized = fields[idx].fieldNameHumanized;
-    _%>
-        <%_
-        if (fields[idx].fieldIsEnum) {
-          const values = fields[idx].fieldValues.replace(/\s/g, '').split(',');
-          let i=0;
-        _%>
-          <%= fieldName %>: [
-          {label:translate('<%= i18nKeyPrefix %>.home.select'), value: null},
-          <%_for (i=0;i < values.length;i++) {
-            const value = values[i];
+    useEffect(() => {
+      const options = {};
+      <%_ for (idx in fields) {
+        const fieldType = fields[idx].fieldType;
+        const fieldName = fields[idx].fieldName;
+        const fieldNameHumanized = fields[idx].fieldNameHumanized;
+      _%>
+          <%_
+          if (fields[idx].fieldIsEnum) {
+            const values = fields[idx].fieldValues.replace(/\s/g, '').split(',');
+            let i=0;
           _%>
-            {label:'<%= value %>', value:'<%= value %>'},
+          options['<%=fieldName %>']= [
+            <%_for (i=0;i < values.length;i++) {
+              const value = values[i];
+            _%>
+              {label:'<%= value %>', value:'<%= value %>'},
+            <%_ } _%>
+            ];
           <%_ } _%>
-          ],
+      <%_ } _%>
+      <%_ otherEntityActions.forEach(val => { _%>
+        <%_ if (val.relationshipType!=='one-to-one') {  _%>
+        options['<%= val.relationshipFieldName %>Id']=props.<%= val.instance %>.map(e => ({ label: e.<%= val.entityField %>, value: e.id }));
+        <%_ } else {_%>
+          <%_ if (val.ownerSide) {  _%>
+        options['<%= val.relationshipFieldName %>Id']=props.<%= val.instance %>.map(e => ({ label: e.<%= val.entityField %>, value: e.id }));
+          <%_ } _%>
         <%_ } _%>
-    <%_ } _%>
-    }
-  
-    const filterOptions = (field, fieldType) => {
-      return (
-        <div>
-          {fieldType === 'Enum' ? (
-          <Dropdown
-            filter
-            appendTo={document.body}
-            value={filters[field] && filters[field].value}
-            options={filterEnumOptions[field]}
-            onChange={e => {
-              dt.filter(e.value, field, 'equals');
-            }}
-          />
-        ) : fieldType === 'LocalDate' ? (
+      <%_ }) _%>      
+      setRelationshipOptions(options);
+    }, [ <%_ otherEntityActions.forEach(val => { _%>props.<%= val.instance %>, <%_ }) _%>]);
+    
+
+    const filterOptions = (fieldTemp, fieldType) => {
+    const field = fieldType === 'Relationship' ? fieldTemp + 'Id' : fieldTemp;
+    return (
+      <div>
+        {fieldType === 'LocalDate' || fieldType === 'ZonedDateTime' || fieldType === 'Instant' ? (
           <Calendar
             value={filters[field] && filters[field].value}
             appendTo={document.body}
             onChange={e => {
               dt.filter(e.value ? moment(e.value.valueOf()).format('YYYY-MM-DD') : '', field, 'equals');
             }}
+            showTime={fieldType === 'ZonedDateTime' || fieldType === 'Instant' ? true : false}
             showButtonBar={true}
           />
-        ) : fieldType === 'ZonedDateTime' || fieldType === 'Instant' ? (
-          <Calendar
-            value={filters[field] && filters[field].value}
-            appendTo={document.body}
-            showTime={true}
-            onChange={e => {
-              dt.filter(e.value ? moment(e.value.valueOf()).toISOString() : '', field, 'lessThanOrEqual');
-            }}
-            showButtonBar={true}
-          />
-        ) : fieldType === 'Boolean' ? (
-          <Dropdown
+        ) : fieldType === 'Boolean' || fieldType === 'Relationship' || fieldType === 'Enum' ? (
+          <MultiSelect
             filter
             appendTo={document.body}
             value={filters[field] && filters[field].value}
-            options={[{ label: 'TRUE', value: true }, { label: 'FALSE', value: false }]}
+            options={
+              fieldType === 'Boolean'
+                ? [{ label: 'TRUE', value: true }, { label: 'FALSE', value: false }]
+                : relationshipOptions[field]
+            }
+            placeholder={translate('<%= i18nKeyPrefix %>.home.select')}
             onChange={e => {
-              dt.filter(e.value, field, 'equals');
+              dt.filter(e.value, field, 'in');
             }}
           />
-        ) : fieldType === 'Long' || fieldType === 'Integer' || fieldType === 'Double' ? (
+          ) : fieldType === 'Long' || fieldType === 'Integer' || fieldType === 'Double' || fieldType === 'Float' || fieldType === 'BigDecimal' ? (
           <InputText
             value={filters[field] ? filters[field].value : ''}
+            keyfilter={fieldType === 'Long' || fieldType === 'Integer' ? 'int' : 'num'}
             onChange={e => {
-              dt.filter(e.currentTarget.value, field, 'equals');
+              const regex = /^-?[1-9][0-9]*(.[0-9]+)?$/;
+              if (regex.test(e.currentTarget.value)||e.currentTarget.value==='') {
+                dt.filter(e.currentTarget.value, field, 'equals');
+              } else {
+                setFilters({ ...filters, [field]: { value: e.currentTarget.value } });
+              }
             }}
           />
         ) : (
@@ -469,10 +426,12 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
             }}
           />
         )}
-        </div>
-      );
-    };
+      </div>
+    );
+  };
+
   <%_ } _%>
+  
 
   const header = (
     <div className="p-grid">
@@ -495,7 +454,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   );
 
   const fieldTemplate = (entity: any, column: any) => {
-    if (column['fieldType'] === 'action') {
+    if (column['fieldType'] === 'entityActionsCRUD') {
       return (
         <div style={{ width: 150, textAlign: 'center' }}>
           <Button
@@ -529,6 +488,9 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
       );
     } else if (column['fieldType'] === 'Boolean'){
       return <span>{entity[column['field']]?'true':'false'}</span>;
+    } else if (column['fieldType'] === 'Relationship') {
+      return <span>{entity[column['field']+column['otherEntityFieldCapitalized']]}</span>;  
+    <%_ if (fieldsContainBlob) { _%>  
     <%_ if (fieldsContainBlobOrImage) { _%>
     } else if (column['fieldType'] === 'blob') {
       return (
@@ -562,6 +524,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
           ) : null}
         </div>
       );
+    <%_ } _%>
     <%_ } _%>
     } else if (column['fieldType'] === 'List') {
       return (
@@ -612,14 +575,14 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
                   body={entity => fieldTemplate(entity, col)}
                   key={col.field}
                   field={col.field}
-                  header={col.header}
+                  header={col.fieldType === 'entityActionsCRUD' ? '' : col.field === 'id' ? 'Id' :translate('<%= i18nKeyPrefix %>.' + col.field)}
                   <%_ if (pagination !== 'no') { _%>
-                  sortable={ col.fieldType === 'action' ? false : true }
+                  sortable={ col.fieldType === 'entityActionsCRUD' ? false : true }
                   <%_ } _%>
                   <%_ if (jpaMetamodelFiltering) { _%>
                   filterMatchMode={col.fieldType === 'Enum'||col.fieldType === 'Boolean' ? 'equals' : 'contains'}
-                  filter={col.fieldType === 'action'||col.fieldType.includes('blob')?false:true}
-                  style={col.fieldType === 'action' ? { width: 260 } : col.fieldType === 'Enum' ? { width: 200 } : { width: 100 }}
+                  filter={col.fieldType === 'entityActionsCRUD'||col.fieldType.includes('blob')?false:true}
+                  style={col.fieldType === 'entityActionsCRUD' ? { width: 260 } : col.fieldType === 'Enum' ? { width: 200 } : { width: 100 }}
                   filterElement={filterOptions(col.field,col.fieldType)}
                   <%_ } _%>
                 />
@@ -632,16 +595,19 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   );
 };
 
-const mapStateToProps = ({ <%= entityInstance %> }: IRootState) => ({
-  <%= entityInstance %>List: <%= entityInstance %>.entities,
+const mapStateToProps = ( storeState : IRootState) => ({
+  <%= entityInstance %>List: storeState.<%= entityInstance %>.entities,
   <%_ if (pagination !== 'no') { _%>
-  totalItems: <%= entityInstance %>.totalItems,
+  totalItems: storeState.<%= entityInstance %>.totalItems,
   <%_ } _%>
   <%_ if (pagination === 'infinite-scroll') { _%>
-  links: <%= entityInstance %>.links,
-  entity: <%= entityInstance %>.entity,
-  updateSuccess: <%= entityInstance %>.updateSuccess,
-  <%_ } _%>
+  links: storeState.<%= entityInstance %>.links,
+  entity: storeState.<%= entityInstance %>.entity,
+  updateSuccess: storeState.<%= entityInstance %>.updateSuccess,
+  <%_ } _%>  
+  <%_ otherEntityActions.forEach(val => { _%>
+    <%= val.instance %>: storeState.<%= val.reducer %>.<%= val.entity === 'User' ? val.instance : 'entities' %>,
+  <%_ }) _%>
   
 });
 

@@ -39,6 +39,21 @@ export interface I<%= entityReactName %> {
     <%_ }); _%>
 }
 
-export const defaultValue:  Readonly<I<%= entityReactName %>> = {
-<% for (idx in defaultVariablesValues) { %><%- defaultVariablesValues[idx] %><% } %>
+export const defaultValue:  Readonly<I<%= entityReactName %>> = {       
+    <%_fields.forEach(field => {
+        const fieldType = field.fieldType;
+        const fieldName = field.fieldName;
+        if (clientFramework === 'react') {_%>
+            <%_if (fieldType === 'Boolean') {_%><%=fieldName%>: false,<%_}
+            else if (fieldType === 'String') {_%><%=fieldName%>: '',<%_}  
+            else if (fieldType === 'Integer') {_%><%=fieldName%>: 0,<%_}  
+            else if (fieldType === 'Long') {_%><%=fieldName%>: 0,<%_}  
+            else if (fieldType === 'Float') {_%><%=fieldName%>: 0,<%_}  
+            else if (fieldType === 'Double') {_%><%=fieldName%>: 0,<%_}  
+            else if (fieldType === 'BigDecimal') {_%><%=fieldName%>: 0,<%_}         
+            
+            _%>
+
+        <%_}
+    });_%>
 };

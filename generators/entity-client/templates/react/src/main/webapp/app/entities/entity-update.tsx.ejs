@@ -134,7 +134,7 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
   <%_ relFieldNames.forEach(val => { _%>
   const [<%= val.relationshipFieldName %>Id, set<%= _.upperFirst(val.relationshipFieldName) %>] = useState('0');
   <%_ }) _%>
-  const [entity, setEntity] = useState<I<%= entityReactName %>>({});
+  const [entity, setEntity] = useState<I<%= entityReactName %>>(props.<%= entityInstance %>Entity);
   const [errors, setErrors] = useState(false);
 
   <%_ for (idx in fields) {
@@ -404,13 +404,13 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
                   <%= fieldNameHumanized %>
                 </Translate>
               </h5>
-              <InputTextarea rows={10}  value={entity.<%= fieldName %> ? entity.<%= fieldName %> : ''} onChange={handleInputChange} />
+              <InputTextarea rows={10}  value={entity.<%= fieldName %>} onChange={handleInputChange} />
             </div>
             <%_ } _%>
           <%_ } else { _%>
               <div className="p-col-8 p-fluid">
                 <h5><Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>"><%= fieldNameHumanized %></Translate></h5>
-                <InputText name="<%= fieldName %>" value={entity.<%= fieldName %> ? entity.<%= fieldName %> : ''} onChange={handleInputChange}/>
+                <InputText name="<%= fieldName %>" value={entity.<%= fieldName %>} onChange={handleInputChange}/>
                   <%_ if (fields[idx].fieldValidate && fields[idx].fieldValidateRules.includes('required')) { _%>
                   <RequiredValidation entityField={entity.<%= fieldName %>} />
                   <%_ } _%>
