@@ -29,7 +29,7 @@ body {
 }
 
 a {
-  <%_ if (clientTheme === 'nova-light') { _%>
+  <%_ if (clientTheme === 'none'||clientTheme === 'nova-light') { _%>
     color: #533f03;
   <%_ } _%>
   <%_ if (clientTheme === 'nova-dark') { _%>
@@ -348,7 +348,11 @@ http://stackoverflow.com/questions/23436430/bootstrap-3-input-group-100-width */
 @import '~primeflex/primeflex.css';
 @import '~primeicons/primeicons.css';
 @import '~primereact/resources/primereact.min.css';
-@import '.~primereact/resources/themes/<%=clientTheme%>/theme.css';
+<%_ if (clientTheme === 'none') { _%>
+  @import '.~primereact/resources/themes/nova-light/theme.css';
+<%_ }else{ _%>
+  @import '.~primereact/resources/themes/<%=clientTheme%>/theme.css';
+<%_ } _%>
 @import '~primeflex/primeflex.css';
 
 /* jhipster-needle-scss-add-main JHipster will add new css style */
