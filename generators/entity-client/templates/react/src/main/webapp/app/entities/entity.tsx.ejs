@@ -459,7 +459,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
         <div style={{ width: 150, textAlign: 'center' }}>
           <Button
             type="button"
-            onClick={() => props.history.push('<%= entityModelFileName %>/' + entity.id)}
+            onClick={() => props.history.push(`${props.match.url}/${entity.id}`)}
             icon="pi pi-search"
             className="p-button-success"
             style={{ marginRight: '.5em' }}
@@ -468,7 +468,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
           />
           <Button
             type="button"
-            onClick={() => props.history.push('<%= entityModelFileName %>/' + entity.id + '/edit')}
+            onClick={() => props.history.push(`${props.match.url}/${entity.id}/edit`)}
             icon="pi pi-pencil"
             className="p-button-warning"
             style={{ marginRight: '.5em' }}
@@ -477,7 +477,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
           />
           <Button
             type="button"
-            onClick={() => props.history.push('<%= entityModelFileName %>/' + entity.id + '/delete')}
+            onClick={() => props.history.push(`${props.match.url}/${entity.id}/delete`)}
             icon="pi pi-times"
             className="p-button-danger"
             style={{ marginRight: '.5em' }}
