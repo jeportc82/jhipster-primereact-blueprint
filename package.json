@@ -1,6 +1,6 @@
 {
   "name": "generator-jhipster-primereact-blueprint",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "This project adds Primereact to the JHipster React application. It is based on JHipster Blueprint",
   "keywords": [
     "yeoman-generator",
