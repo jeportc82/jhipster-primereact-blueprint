@@ -148,20 +148,36 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
     <%_ if (relationshipType === 'many-to-one'
     || (relationshipType === 'one-to-one' && ownerSide === true)
     || (relationshipType === 'many-to-many' && ownerSide === true )) { _%>
-    <%_ if (otherEntityName === 'user') { _%>
-      <%_ if (dto === 'no') { _%>
-        { field:'<%=relationshipFieldName%>', fieldType: 'String' },
+    <%_ if (relationshipType === 'many-to-many') { _%>
+      <%_ if (otherEntityName === 'user') { _%>
+        <%_ if (dto === 'no') { _%>
+          { field:'<%=relationshipFieldNamePlural%>', fieldType: 'RelationshipList' },
+        <%_ } else { _%>
+          { field:'<%=relationshipFieldNamePlural%>', fieldType: 'RelationshipList', otherEntityFieldCapitalized:'<%=otherEntityFieldCapitalized%>' },
+        <%_ } _%>
       <%_ } else { _%>
-        { field:'<%=relationshipFieldName%>', fieldType: 'Relationship', otherEntityFieldCapitalized:'<%=otherEntityFieldCapitalized%>' },
+        <%_ if (dto === 'no') { _%>
+          { field:'<%=relationshipFieldNamePlural%>', fieldType: 'RelationshipList' },
+          <%_ } else { _%>
+            { field:'<%=relationshipFieldNamePlural%>', fieldType: 'RelationshipList', otherEntityFieldCapitalized:'<%=otherEntityFieldCapitalized%>' },
+          <%_ } _%>
       <%_ } _%>
-    <%_ } else { _%>
-      <%_ if (dto === 'no') { _%>
-         { field:'<%=relationshipFieldName%>', fieldType: 'String' },
+    <%_ } else{ _%>
+      <%_ if (otherEntityName === 'user') { _%>
+        <%_ if (dto === 'no') { _%>
+          { field:'<%=relationshipFieldName%>', fieldType: 'String' },
         <%_ } else { _%>
           { field:'<%=relationshipFieldName%>', fieldType: 'Relationship', otherEntityFieldCapitalized:'<%=otherEntityFieldCapitalized%>' },
         <%_ } _%>
-    <%_ } _%>
-  <%_ } _%>
+      <%_ } else { _%>
+        <%_ if (dto === 'no') { _%>
+          { field:'<%=relationshipFieldName%>', fieldType: 'String' },
+          <%_ } else { _%>
+            { field:'<%=relationshipFieldName%>', fieldType: 'Relationship', otherEntityFieldCapitalized:'<%=otherEntityFieldCapitalized%>' },
+          <%_ } _%>
+      <%_ } _%>
+    <%_ }  _%>
+    <%_ }  _%>
   <%_ } _%>
     { field:'entityActionsCRUD', fieldType:'entityActionsCRUD' }
     ]
@@ -197,11 +213,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
     const otherEntityField = relationships[idx].otherEntityField;
     const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized; _%>
     <%_ if ((relationshipType === 'many-to-many' && ownerSide === true )) { _%>
-      <%_ if (otherEntityName !== 'user') { _%>
-        <%_ if (relationshipType === 'many-to-many') { _%>
-          <%=relationshipFieldNamePlural%>:'<%=otherEntityField%>',         
-        <%_ } _%>
-      <%_ } _%>
+        <%=relationshipFieldNamePlural%>:'<%=otherEntityField%>',         
     <%_ } _%>
   <%_ } _%>
 }
@@ -526,11 +538,11 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
       );
     <%_ } _%>
     <%_ } _%>
-    } else if (column['fieldType'] === 'List') {
+    } else if (column['fieldType'] === 'RelationshipList') {
       return (
         <div>
           <ul>
-            {entity[column['field']].map(val => (
+            {entity[column['field']]&&entity[column['field']].map(val => (
               <li key={val.id}>{val[manyToManyProperties[column['field']]]}</li>
             ))}
           </ul>

@@ -430,7 +430,8 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
                 const otherEntityField = rel.otherEntityField;
                 const otherEntityFieldCapitalized = rel.otherEntityFieldCapitalized;
                 const relationshipRequired = rel.relationshipRequired;
-                const translationKey = `${i18nKeyPrefix}.${relationshipName}`; _%>
+                const translationKey = `${i18nKeyPrefix}.${relationshipName}`; 
+                const translationKeyPlural = `${i18nKeyPrefix}.${relationshipFieldNamePlural}`; _%>
                 <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true && otherEntityName === 'user')) { _%>
 
               <%_ if (dto === 'no') { _%>
@@ -498,8 +499,21 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
           </div>
           <%_ } else if (relationshipType === 'many-to-many' && rel.ownerSide === true) { _%>
             <div className="p-col-8 p-fluid">
+            <%_ if (otherEntityName === 'user') { _%>
             <h5 >
-              <Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate>
+              <Translate contentKey="<%= translationKeyPlural %>"><%= relationshipNameHumanized %></Translate>
+            </h5>
+            <ListBox
+                value={entity.users&&entity.users.map(user=>user.id) }
+                options={[...props.users.map(e => ({ label: e.<%=otherEntityField%>, value: e.id }))]}
+                onChange={e => setEntity({ ...entity, users: e.value.map(value=>props.users.find(user=>user.id===value))})}
+                listStyle={{ maxHeight: '150px' }}
+                multiple
+                filter
+              />
+            <%_ }else{ _%>
+            <h5 >
+              <Translate contentKey="<%= translationKeyPlural %>"><%= relationshipNameHumanized %></Translate>
             </h5>
             <ListBox
               value={entity.<%=relationshipFieldNamePlural%>? entity.<%=relationshipFieldNamePlural%> : []}
@@ -509,6 +523,7 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
               multiple
               filter
             />
+            <%_ } _%>
             </div>
           <%_ } _%>
           <%_ }) _%>
