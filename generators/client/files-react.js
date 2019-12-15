@@ -280,6 +280,7 @@ const files = {
                 'shared/util/date-utils.ts',
                 'shared/util/pagination.constants.ts',
                 'shared/util/entity-utils.ts',
+                'shared/util/entity-template.tsx',
                 // components
                 { file: 'shared/auth/private-route.tsx', method: 'processJsx' },
                 { file: 'shared/error/error-boundary.tsx', method: 'processJsx' },
