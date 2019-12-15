@@ -72,6 +72,7 @@ Object.keys(differentRelationships).forEach(key => {
       test: uniqueRel.relationshipType==='one-to-one'&&JSON.stringify(uniqueRel),
       relationshipType: uniqueRel.relationshipType,
       relationshipFieldName: uniqueRel.relationshipFieldName,
+      relationshipFieldNamePlural: uniqueRel.relationshipFieldNamePlural
     });
     if (uniqueRel.otherEntityAngularName === 'User') {
 _%>
@@ -152,13 +153,13 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
         <%_ if (dto === 'no') { _%>
           { field:'<%=relationshipFieldNamePlural%>', fieldType: 'RelationshipList' },
         <%_ } else { _%>
-          { field:'<%=relationshipFieldNamePlural%>', fieldType: 'RelationshipList', otherEntityFieldCapitalized:'<%=otherEntityField%>' },
+          { field:'<%=relationshipFieldNamePlural%>', fieldType: 'RelationshipList', otherEntityField:'<%=otherEntityField%>' },
         <%_ } _%>
       <%_ } else { _%>
         <%_ if (dto === 'no') { _%>
           { field:'<%=relationshipFieldNamePlural%>', fieldType: 'RelationshipList' },
           <%_ } else { _%>
-            { field:'<%=relationshipFieldNamePlural%>', fieldType: 'RelationshipList', otherEntityFieldCapitalized:'<%=otherEntityField%>' },
+            { field:'<%=relationshipFieldNamePlural%>', fieldType: 'RelationshipList', otherEntityField:'<%=otherEntityField%>' },
           <%_ } _%>
       <%_ } _%>
     <%_ } else{ _%>
@@ -201,25 +202,6 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   const [filters, setFilters] = useState({});
   const [relationshipOptions, setRelationshipOptions] = useState({});
   <%_ } _%>
-  const manyToManyProperties={
-  <%_ for (idx in relationships) {
-    const relationshipType = relationships[idx].relationshipType;
-    const ownerSide = relationships[idx].ownerSide;
-    const relationshipFieldName = relationships[idx].relationshipFieldName;
-    const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-    const otherEntityName = relationships[idx].otherEntityName;
-    const otherEntityStateName = relationships[idx].otherEntityStateName;
-    const otherEntityField = relationships[idx].otherEntityField;
-    const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized; _%>
-    <%_ if ((relationshipType === 'many-to-many' && ownerSide === true )) { _%>
-        <%=relationshipFieldNamePlural%>:'<%=otherEntityField%>',         
-    <%_ } _%>
-  <%_ } _%>
-}
-
-
-
-
 
   <%_ if (pagination === 'pagination' || pagination === 'pager' || pagination === 'infinite-scroll' || pagination !== 'no' && pagination !== 'infinite-scroll') { _%>
   const getAllEntities = () => {
@@ -238,7 +220,6 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   <%_ } _%>
   };
   <%_ } _%>
-
 
   <%_ if (pagination === 'infinite-scroll') { _%>
   const resetAll = () => {
@@ -375,10 +356,12 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
           <%_ } _%>
       <%_ } _%>
       <%_ otherEntityActions.forEach(val => { _%>
-        <%_ if (val.relationshipType!=='one-to-one') {  _%>
-        options['<%= val.relationshipFieldName %>Id']=props.<%= val.instance %>.map(e => ({ label: e.<%= val.entityField %>, value: e.id }));
+        <%_ if (val.relationshipType === 'many-to-many') {  _%>
+        options['<%= val.relationshipFieldNamePlural %>']=props.<%= val.instance %>.map(e => ({ label: e.<%= val.entityField %>, value: e.id }));
         <%_ } else {_%>
           <%_ if (val.ownerSide) {  _%>
+        options['<%= val.relationshipFieldName %>Id']=props.<%= val.instance %>.map(e => ({ label: e.<%= val.entityField %>, value: e.id }));
+          <%_ } else {_%>
         options['<%= val.relationshipFieldName %>Id']=props.<%= val.instance %>.map(e => ({ label: e.<%= val.entityField %>, value: e.id }));
           <%_ } _%>
         <%_ } _%>

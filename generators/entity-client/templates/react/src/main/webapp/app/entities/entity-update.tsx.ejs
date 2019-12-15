@@ -130,10 +130,7 @@ export interface I<%= entityReactName %>UpdateState {
 export interface I<%= entityReactName %>UpdateProps extends StateProps, DispatchProps, RouteComponentProps<{id: string}>  {}
 
 const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)=> {
-  const [isNew, setIsNew] = useState(!props.match.params || !props.match.params.id);
-  <%_ relFieldNames.forEach(val => { _%>
-  const [<%= val.relationshipFieldName %>Id, set<%= _.upperFirst(val.relationshipFieldName) %>] = useState('0');
-  <%_ }) _%>
+  const isNew = !props.match.params || !props.match.params.id;
   const [entity, setEntity] = useState<I<%= entityReactName %>>(props.<%= entityInstance %>Entity);
   const [errors, setErrors] = useState(false);
 
