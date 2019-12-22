@@ -324,7 +324,7 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
                   <%= fieldNameHumanized %>
                 </Translate>
               </h5>
-              <Dropdown name="<%= fieldName %>" value={entity.<%= fieldName %>} options={<%= fieldName %>Options} onChange={handleChange}  placeholder="Select a Car"/>
+              <Dropdown name="<%= fieldName %>" value={entity.<%= fieldName %>} options={<%= fieldName %>Options} onChange={handleChange} showClear  placeholder="Select a Car"/>
                 <%_ if (fields[idx].fieldValidate && fields[idx].fieldValidateRules.includes('required')) { _%>
                   <RequiredValidation entityField={entity.<%= fieldName %>} />
                 <%_ } _%>
@@ -437,12 +437,14 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
                       value={entity.<%=relationshipName%>Id ? entity.<%=relationshipName%>Id : 0} 
                       options={[...props.<%= otherEntityNamePlural %>.map(e=>({label:e.<%=otherEntityField%>,value:e.id}))]}
                       onChange={(e) => this.setState({cities: e.value})} 
+                      showClear
                       placeholder="Select..."/>
                   <%_ } else { _%>
                     <Dropdown 
                       value={entity.<%=relationshipName%>Id ? entity.<%=relationshipName%>Id : 0} 
                       options={[...props.<%= otherEntityNamePlural %>.map(e=>({label:e.<%=otherEntityField%>,value:e.id}))]}
                       onChange={(e) => this.setState({cities: e.value})} 
+                      showClear
                       placeholder="Select... required"/>
                   <%_ } _%>
               <%_ } else { _%>
@@ -455,6 +457,7 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
                       value={entity.<%=relationshipName%>Id ? entity.<%=relationshipName%>Id : 0}
                       options={[...props.<%= otherEntityNamePlural %>.map(e=>({label:e.<%=otherEntityField%>,value:e.id}))]}
                       onChange={e => setEntity({ ...entity, <%= relationshipName %>Id: e.value })}
+                      showClear
                       placeholder="Select..."
                     />
                   </div>
@@ -467,6 +470,7 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
                       value={entity.<%=relationshipName%>Id ? entity.<%=relationshipName%>Id : 0}
                       options={[...props.<%= otherEntityNamePlural %>.map(e=>({label:e.<%=otherEntityField%>,value:e.id}))]}
                       onChange={e => setEntity({ ...entity, <%= relationshipName %>Id: e.value })}
+                      showClear
                       placeholder="Select..."
                     />
                   </div>
@@ -483,6 +487,7 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
                       value={entity.<%=relationshipName%>Id ? entity.<%=relationshipName%>Id : 0}
                       options={[...props.<%= otherEntityNamePlural %>.map(e=>({label:e.<%=otherEntityField%>,value:e.id}))]}
                       onChange={e => setEntity({ ...entity, <%= relationshipName %>Id: e.value })}
+                      showClear
                       placeholder="Select..."
                     />
               <%_ } else { _%>
@@ -490,6 +495,7 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
                       value={entity.<%=relationshipName%>Id ? entity.<%=relationshipName%>Id : 0}
                       options={[...props.<%= otherEntityNamePlural %>.map(e=>({label:e.<%=otherEntityField%>,value:e.id}))]}
                       onChange={e => setEntity({ ...entity, <%= relationshipName %>Id: e.value })}
+                      showClear
                       placeholder="Select..."
                     />
               <%_ } _%>
