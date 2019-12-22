@@ -65,7 +65,7 @@ module.exports = class extends ClientGenerator {
         // The prompting phase is being overriden so that we can ask our own questions
         return {
             askForClient: prompts.askForClient,
-            askForClientTheme: prompts.askForClientTheme,
+            askForClientTheme: prompts.askForClientTheme
 
             // setSharedConfigOptions() {
             //     this.configOptions.lastQuestion = this.currentQuestion;
@@ -93,13 +93,11 @@ module.exports = class extends ClientGenerator {
     get writing() {
         // The writing phase is being overriden so that we can write our own templates as well.
         // If the templates doesnt need to be overrriden then just return `super._writing()` here
-        const phaseFromJHipster = super._writing();
-        const customPhaseSteps = {
+        return {
             writeAdditionalFile() {
                 writeReactFiles.call(this);
             }
         };
-        return Object.assign(phaseFromJHipster, customPhaseSteps);
     }
 
     get install() {
