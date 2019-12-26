@@ -34,7 +34,7 @@ import {
   <%_ } _%>
 } from 'react-jhipster';
 import { IRootState } from 'app/shared/reducers';
-import { fieldTemplate,  <%_ if (jpaMetamodelFiltering) { _%> filterTemplate, <%_ } _%>  } from './<%= entityModelFileName %>-template';
+import { fieldTemplate,  <%_ if (jpaMetamodelFiltering) { _%> filterTemplate, <%_ } _%>  } from './<%= entityFileName %>-template';
 <%_
 let hasRelationshipQuery = false;
 let otherEntityActions = new Set();
