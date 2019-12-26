@@ -49,7 +49,7 @@ const reactFiles = {
                 {
                     file: 'entities/entity-template.tsx',
                     method: 'processJsx',
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.tsx`
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-template.tsx`
                 },
                 {
                     file: 'entities/entity.reducer.ts',

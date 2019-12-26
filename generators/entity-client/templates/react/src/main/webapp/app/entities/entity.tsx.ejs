@@ -34,7 +34,7 @@ import {
   <%_ } _%>
 } from 'react-jhipster';
 import { IRootState } from 'app/shared/reducers';
-import { fieldTemplate,  <%_ if (jpaMetamodelFiltering) { _%> filterTemplate, <%_ } _%>  } from 'app/shared/util/entity-template';
+import { fieldTemplate,  <%_ if (jpaMetamodelFiltering) { _%> filterTemplate, <%_ } _%>  } from './<%= entityModelFileName %>-template';
 <%_
 let hasRelationshipQuery = false;
 let otherEntityActions = new Set();
@@ -104,7 +104,6 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { MultiSelect } from 'primereact/multiselect';
 import { OverlayPanel } from 'primereact/overlaypanel';
-import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 
 

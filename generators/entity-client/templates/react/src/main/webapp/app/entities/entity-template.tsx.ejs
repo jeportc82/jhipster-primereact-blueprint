@@ -28,7 +28,7 @@ export const filterTemplate = (fieldTemp, fieldType, filters, setFilters, relati
           options={
             fieldType === 'Boolean' ? [{ label: 'TRUE', value: true }, { label: 'FALSE', value: false }] : relationshipOptions[field]
           }
-          placeholder={translate('global.entity.action.select')}
+          placeholder={translate('<%= i18nKeyPrefix %>.home.select')}
           onChange={e => {
             dataTableRef.current.filter(e.value, field, 'in');
           }}
