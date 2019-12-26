@@ -31,7 +31,6 @@ const CLIENT_REACT_TEMPLATES_DIR = 'react';
  * For any other config an object { file:.., method:.., template:.. } can be used
  */
 
-
 const reactFiles = {
     client: [
         {
@@ -44,6 +43,11 @@ const reactFiles = {
                 },
                 {
                     file: 'entities/entity.tsx',
+                    method: 'processJsx',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.tsx`
+                },
+                {
+                    file: 'entities/entity-template.tsx',
                     method: 'processJsx',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.tsx`
                 },
