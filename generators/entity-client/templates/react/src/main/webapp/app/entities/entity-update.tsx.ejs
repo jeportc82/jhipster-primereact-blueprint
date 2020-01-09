@@ -324,7 +324,7 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
                   <%= fieldNameHumanized %>
                 </Translate>
               </h5>
-              <Dropdown name="<%= fieldName %>" value={entity.<%= fieldName %>} options={<%= fieldName %>Options} onChange={handleChange} showClear  placeholder="Select a Car"/>
+              <Dropdown name="<%= fieldName %>" value={entity.<%= fieldName %>} options={<%= fieldName %>Options} onChange={handleChange} showClear filter placeholder={translate('<%= i18nKeyPrefix %>.home.select')}/>
                 <%_ if (fields[idx].fieldValidate && fields[idx].fieldValidateRules.includes('required')) { _%>
                   <RequiredValidation entityField={entity.<%= fieldName %>} />
                 <%_ } _%>
@@ -336,7 +336,12 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
                     <%= fieldNameHumanized %>
                   </Translate>
                 </h5>
-                <Spinner name="<%= fieldName %>" value={entity.<%= fieldName %> ? entity.<%= fieldName %> : 0} onChange={handleChange} />
+                <InputText
+                  value={entity.<%= fieldName %> ? entity.<%= fieldName %> : ''}
+                  name="<%= fieldName %>" 
+                  keyfilter={'int'}
+                  onChange={handleChange}
+                />
                   <%_ if (fields[idx].fieldValidate && fields[idx].fieldValidateRules.includes('required')) { _%>
                   <RequiredValidation entityField={entity.<%= fieldName %>} />
                   <%_ } _%>
@@ -348,7 +353,12 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
                     <%= fieldNameHumanized %>
                   </Translate>
                 </h5>
-                <Spinner name="<%= fieldName %>" value={entity.<%= fieldName %> ? entity.<%= fieldName %> : 0} onChange={handleChange} step={0.01} />
+                <InputText
+                  value={entity.<%= fieldName %> ? entity.<%= fieldName %> : ''}
+                  keyfilter={'num'}
+                  name="<%= fieldName %>" 
+                  onChange={handleChange}
+                />
                   <%_ if (fields[idx].fieldValidate && fields[idx].fieldValidateRules.includes('required')) { _%>
                   <RequiredValidation entityField={entity.<%= fieldName %>} />
                   <%_ } _%>
@@ -533,9 +543,9 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
           </div>
           <div className="p-grid p-justify-center">
             <div className="p-col-8">
-              <Button label="Back" onClick={() => props.history.goBack()} />
+              <Button label={translate('entity.action.back')} onClick={() => props.history.goBack()} />
                   &nbsp;
-              <Button label="Save" onClick={saveEntity} />
+              <Button label={translate('entity.action.save')} onClick={saveEntity} />
             </div>
           </div>
         </div>  
