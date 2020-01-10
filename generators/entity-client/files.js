@@ -71,11 +71,6 @@ const reactFiles = {
             path: REACT_DIR,
             templates: [
                 {
-                    file: 'entities/entity-delete-dialog.tsx',
-                    method: 'processJsx',
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-delete-dialog.tsx`
-                },
-                {
                     file: 'entities/entity-update.tsx',
                     method: 'processJsx',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-update.tsx`

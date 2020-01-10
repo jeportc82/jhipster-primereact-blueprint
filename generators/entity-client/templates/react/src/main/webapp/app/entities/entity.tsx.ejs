@@ -98,6 +98,7 @@ import {
   getSearchEntities,
   <%_ } _%>
   getEntities, 
+  deleteEntity,
   reset
 } from './<%= entityFileName %>.reducer';
 import { DataTable } from 'primereact/datatable';
@@ -105,7 +106,7 @@ import { Column } from 'primereact/column';
 import { MultiSelect } from 'primereact/multiselect';
 import { OverlayPanel } from 'primereact/overlaypanel';
 import { Button } from 'primereact/button';
-
+import { Dialog } from 'primereact/dialog';
 
 
 export interface I<%= entityReactName %>Props extends StateProps, DispatchProps, RouteComponentProps<{url: string}> {}
@@ -530,6 +531,7 @@ const mapDispatchToProps = {
  getSearchEntities,
  <%_ } _%>
  getEntities,
+ deleteEntity,
  <%_ if (jpaMetamodelFiltering) { _%>
   getEntitiesByQuery,
  <%_ } _%>
