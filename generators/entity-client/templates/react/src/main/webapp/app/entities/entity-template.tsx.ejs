@@ -63,39 +63,7 @@ export const filterTemplate = (fieldTemp, fieldType, filters, setFilters, relati
 };
 
 export const fieldTemplate = (entity: any, column: any, history: any, matchUrl) => {
-  if (column['fieldType'] === 'entityActionsCRUD') {
-    return (
-      <div style={{ width: 150, textAlign: 'center' }}>
-        <Button
-          type="button"
-          onClick={() => history.push(`${matchUrl}/${entity.id}`)}
-          icon="pi pi-search"
-          className="p-button-success"
-          style={{ marginRight: '.5em' }}
-          tooltip={translate('entity.action.view')}
-          tooltipOptions={{ position: 'top' }}
-        />
-        <Button
-          type="button"
-          onClick={() => history.push(`${matchUrl}/${entity.id}/edit`)}
-          icon="pi pi-pencil"
-          className="p-button-warning"
-          style={{ marginRight: '.5em' }}
-          tooltip={translate('entity.action.edit')}
-          tooltipOptions={{ position: 'top' }}
-        />
-        <Button
-          type="button"
-          onClick={() => history.push(`${matchUrl}/${entity.id}/delete`)}
-          icon="pi pi-times"
-          className="p-button-danger"
-          style={{ marginRight: '.5em' }}
-          tooltip={translate('entity.action.delete')}
-          tooltipOptions={{ position: 'top' }}
-        />
-      </div>
-    );
-  } else if (column['fieldType'] === 'Boolean') {
+ if (column['fieldType'] === 'Boolean') {
     return <span>{entity[column['field']] ? 'true' : 'false'}</span>;
   } else if (column['fieldType'] === 'Relationship') {
     return <span>{entity[column['field'] + column['otherEntityFieldCapitalized']]}</span>;

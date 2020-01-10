@@ -183,6 +183,8 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
 
 
   const [columns, setColumns] = useState(cols);
+  const [visible, setVisible] = useState(false);
+  const [deleteEntity, setDeleteEntity] = useState();
   <%_ if (searchEngine === 'elasticsearch' || pagination !== 'no') { _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
   const [search, setSearch] = useState('');
@@ -392,7 +394,29 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   );
 
   return (
-    <div style={{ minHeight: '100vh' }}>
+    <div>
+      <Dialog
+        appendTo={document.body}
+        header={translate('entity.delete.title')}
+        footer={
+          <div>
+            <Button
+              label="Yes"
+              onClick={() => {
+                setVisible(false);
+                props.deleteEntity(deleteEntity && deleteEntity.id);
+              }}
+            />
+            <Button label="No" onClick={() => setVisible(false)} />
+          </div>
+        }
+        visible={visible}
+        style={{ width: '35rem', zIndex: 50 }}
+        modal
+        onHide={() => setVisible(false)}
+      >
+        {translate('smartmanagerApp.zoneId.delete.question', { id: deleteEntity && deleteEntity.id })}
+      </Dialog>
       {
         <DataTable
           ref={dataTableRef}
@@ -425,20 +449,57 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
                   body={entity => fieldTemplate(entity, col, props.history, props.match.url)}
                   key={col.field}
                   field={col.field}
-                  header={col.fieldType === 'entityActionsCRUD' ? '' : col.field === 'id' ? 'Id' :translate('<%= i18nKeyPrefix %>.' + col.field)}
+                  header={col.field === 'id' ? 'Id' :translate('<%= i18nKeyPrefix %>.' + col.field)}
                   <%_ if (pagination !== 'no') { _%>
-                  sortable={ col.fieldType === 'entityActionsCRUD' ? false : true }
+                  sortable={ col.fieldType.includes('blob') ? false : true }
                   <%_ } _%>
                   <%_ if (jpaMetamodelFiltering) { _%>
                   filterMatchMode={col.fieldType === 'Enum'||col.fieldType === 'Boolean' ? 'equals' : 'contains'}
-                  filter={col.fieldType === 'entityActionsCRUD'||col.fieldType.includes('blob')?false:true}
-                  style={col.fieldType === 'entityActionsCRUD' ? { width: 260 } : col.fieldType === 'Enum' ? { width: 200 } : { width: 100 }}
+                  filter={col.fieldType.includes('blob')?false:true}
+                  style={ col.fieldType === 'Enum' ? { width: 200 } : { width: 100 }}
                   filterElement={filterTemplate(col.field, col.fieldType, filters, setFilters, relationshipOptions, dataTableRef)}
                   <%_ } _%>
                 />
               );
             })
           }
+          <Column
+            body={entity => (
+              <div style={{ width: 150, textAlign: 'center' }}>
+                <Button
+                  type="button"
+                  onClick={() => props.history.push(`${props.match.url}/${entity.id}`)}
+                  icon="pi pi-search"
+                  className="p-button-success"
+                  style={{ marginRight: '.5em' }}
+                  tooltip={translate('entity.action.view')}
+                  tooltipOptions={{ position: 'top' }}
+                />
+                <Button
+                  type="button"
+                  onClick={() => props.history.push(`${props.match.url}/${entity.id}/edit`)}
+                  icon="pi pi-pencil"
+                  className="p-button-warning"
+                  style={{ marginRight: '.5em' }}
+                  tooltip={translate('entity.action.edit')}
+                  tooltipOptions={{ position: 'top' }}
+                />
+                <Button
+                  onClick={() => {
+                    setDeleteEntity(entity);
+                    setVisible(true);
+                  }}
+                  icon="pi pi-times"
+                  className="p-button-danger"
+                  style={{ marginRight: '.5em' }}
+                  tooltip={translate('entity.action.delete')}
+                  tooltipOptions={{ position: 'top' }}
+                />
+              </div>
+            )}
+            header=""
+            style={{ width: 260 }}
+          />
         </DataTable>
       }
     </div>
