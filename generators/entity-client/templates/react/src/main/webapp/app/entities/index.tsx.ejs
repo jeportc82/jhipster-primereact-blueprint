@@ -25,14 +25,12 @@ import <%= entityReactName %> from './<%= entityFileName %>';
 import <%= entityReactName %>Detail from './<%= entityFileName %>-detail';
 <%_ if (!readOnly) { _%>
 import <%= entityReactName %>Update from './<%= entityFileName %>-update';
-import <%= entityReactName %>DeleteDialog from './<%= entityFileName %>-delete-dialog';
 <%_ } _%>
 
 const Routes = ({ match }) => (
   <>
     <Switch>
       <%_ if (!readOnly) { _%>
-      <ErrorBoundaryRoute exact path={`${match.url}/:id/delete`} component={<%= entityReactName %>DeleteDialog} />
       <ErrorBoundaryRoute exact path={`${match.url}/new`} component={<%= entityReactName %>Update} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={<%= entityReactName %>Update} />
       <%_ } _%>
