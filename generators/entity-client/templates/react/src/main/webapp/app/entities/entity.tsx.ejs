@@ -184,7 +184,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
 
   const [columns, setColumns] = useState(cols);
   const [visible, setVisible] = useState(false);
-  const [deleteEntity, setDeleteEntity] = useState();
+  const [selectedEntity, setSelectedEntity] = useState();
   <%_ if (searchEngine === 'elasticsearch' || pagination !== 'no') { _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
   const [search, setSearch] = useState('');
@@ -404,7 +404,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
               label="Yes"
               onClick={() => {
                 setVisible(false);
-                props.deleteEntity(deleteEntity && deleteEntity.id);
+                props.deleteEntity(selectedEntity && selectedEntity.id);
               }}
             />
             <Button label="No" onClick={() => setVisible(false)} />
@@ -415,7 +415,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
         modal
         onHide={() => setVisible(false)}
       >
-        {translate('smartmanagerApp.zoneId.delete.question', { id: deleteEntity && deleteEntity.id })}
+        {translate('smartmanagerApp.zoneId.delete.question', { id: selectedEntity && selectedEntity.id })}
       </Dialog>
       {
         <DataTable
@@ -486,7 +486,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
                 />
                 <Button
                   onClick={() => {
-                    setDeleteEntity(entity);
+                    setSelectedEntity(entity);
                     setVisible(true);
                   }}
                   icon="pi pi-times"
