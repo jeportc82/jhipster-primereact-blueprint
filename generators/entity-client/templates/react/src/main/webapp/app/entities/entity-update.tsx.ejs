@@ -250,6 +250,11 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
       setEntity({ ...entity, [name]: value });
     };
 
+    const handleChangeChecked = (event: any) => {
+      const { name, checked } = event.target;
+      setEntity({ ...entity, [name]: checked });
+    };
+
     return (
       <>
         <div className="p-grid">
@@ -283,7 +288,7 @@ const  <%= entityReactName %>Update = (props:I<%= entityReactName %>UpdateProps)
                 <h5>
                   <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>"><%= fieldNameHumanized %></Translate>
                 </h5>
-                <Checkbox checked={entity.<%= fieldName %>} onChange={handleChange} ></Checkbox>
+                <Checkbox name="<%= fieldName %>" checked={entity.<%= fieldName %>} onChange={handleChangeChecked} ></Checkbox>
               </div>
               <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
               <div className="p-col-8"> 
