@@ -1,6 +1,6 @@
 {
     "name": "generator-jhipster-primereact-blueprint",
-    "version": "1.0.16",
+    "version": "1.0.17",
     "description": "This project adds Primereact to the JHipster React application. It is based on JHipster Blueprint",
     "keywords": [
         "yeoman-generator",
@@ -26,8 +26,9 @@
     "dependencies": {
         "chalk": "2.4.1",
         "ejs": "2.6.1",
-        "eslint-config-airbnb": "17.1.0",
-        "generator-jhipster": "6.6.0",
+        "eslint-config-airbnb": "17.1.1",
+        "generator-jhipster": "6.7.1",
+        "needle": "2.3.2",
         "glob": "7.1.2",
         "gulp-filter": "5.1.0",
         "insight": "0.10.1",
@@ -43,7 +44,8 @@
         "shelljs": "0.8.2",
         "through2": "2.0.3",
         "yeoman-environment": "2.3.4",
-        "yeoman-generator": "3.2.0"
+        "yeoman-generator": "3.2.0",
+        "faker": "4.1.0"
     },
     "devDependencies": {
         "prettier": "1.18.2",
