@@ -23,7 +23,8 @@ module.exports = {
     askForClient,
     askFori18n,
     askForClientTheme,
-    askForClientThemeVariant
+    askForClientThemeVariant,
+    askForClientSideOpts
 };
 
 function askForModuleName() {
@@ -76,6 +77,8 @@ function askFori18n() {
     this.aski18n(this);
 }
 
+function askForClientSideOpts(meta) {}
+
 function askForClientTheme(meta) {
     if (!meta && this.existingProject) {
         return;
@@ -84,14 +87,14 @@ function askForClientTheme(meta) {
     const skipClient = this.skipClient;
     const done = this.async();
     const defaultChoices = [
-        { value: 'luna-amber', name: 'Luna Amber', clientThemeVariant:'dark' },
-        { value: 'luna-blue', name: 'Luna Blue', clientThemeVariant:'dark' },
-        { value: 'luna-green', name: 'Luna Green', clientThemeVariant:'dark' },
-        { value: 'luna-pink', name: 'Luna Pink', clientThemeVariant:'dark' },
-        { value: 'nova-colored', name: 'Nova Colored', clientThemeVariant:'light' },
-        { value: 'nova-dark', name: 'Nova Dark', clientThemeVariant:'dark' },
-        { value: 'nova-light', name: 'Nova Light', clientThemeVariant:'light' },
-        { value: 'rhea', name: 'Rhea', clientThemeVariant:'light' }
+        { value: 'luna-amber', name: 'Luna Amber', clientThemeVariant: 'dark' },
+        { value: 'luna-blue', name: 'Luna Blue', clientThemeVariant: 'dark' },
+        { value: 'luna-green', name: 'Luna Green', clientThemeVariant: 'dark' },
+        { value: 'luna-pink', name: 'Luna Pink', clientThemeVariant: 'dark' },
+        { value: 'nova-colored', name: 'Nova Colored', clientThemeVariant: 'light' },
+        { value: 'nova-dark', name: 'Nova Dark', clientThemeVariant: 'dark' },
+        { value: 'nova-light', name: 'Nova Light', clientThemeVariant: 'light' },
+        { value: 'rhea', name: 'Rhea', clientThemeVariant: 'light' }
     ];
 
     const PROMPT = {
@@ -110,11 +113,11 @@ function askForClientTheme(meta) {
 function promptQuestion(PROMPT, done, generator) {
     generator.prompt(PROMPT).then(prompt => {
         generator.clientTheme = prompt.clientTheme;
-        if(prompt.clientTheme==='nova-light'){
+        if (prompt.clientTheme === 'nova-light') {
             generator.clientThemeVariant = 'light';
-        }else{
+        } else {
             generator.clientThemeVariant = 'dark';
-        }   
+        }
         done();
     });
 }

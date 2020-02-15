@@ -28,14 +28,12 @@ module.exports = {
 };
 
 function writeFiles() {
-
     // writeEnumFiles() {
     this.fields.forEach(field => {
         if (field.fieldIsEnum === true) {
             const enumInfo = utils.buildEnumInfo(field, this.angularAppName, this.packageName, this.clientRootFolder);
 
             // Copy for each
-            
             if (!this.skipClient && this.enableTranslation) {
                 const languages = this.languages || this.getAllInstalledLanguages();
                 languages.forEach(language => {
@@ -58,7 +56,6 @@ function writeFiles() {
             this.copyI18n(language, '/entity-i18n/templates/');
             this.copyI18n(language, './templates');
             this.copyI18n(language);
-
         });
     }
     // }
